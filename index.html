@@ -72,35 +72,27 @@
             border-color: transparent white transparent transparent;
         }
 
-        /* FIXED: Header Hover Animation */
+        /* FIXED: LV Hover Animation */
         #top-header {
-            /* Start transparent, but text MUST be dark so it is visible against the body background */
+            /* Start with dark text and a completely transparent background */
             background-color: transparent;
             color: #1f2937; /* Tailwind gray-800 */
-            transition: background-color 0.3s ease;
+            /* Smooth transition for the background appearing */
+            transition: background-color 0.4s ease, box-shadow 0.4s ease;
         }
         
         #top-header:hover {
-            /* Hover state: solid white background and a subtle shadow */
+            /* Hover state: solid white background drops in */
             background-color: white;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-        }
-        
-        #top-header svg {
-            transition: stroke 0.3s ease, fill 0.3s ease;
-            stroke: currentColor;
-        }
-        
-        #top-header a, #top-header span {
-            color: inherit;
-            transition: color 0.3s ease;
+            /* A subtle shadow makes it "pop" off the page like a bar */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
         }
     </style>
 </head>
 <body class="text-gray-800 flex h-screen overflow-hidden">
 
     <!-- Sidebar -->
-    <aside id="sidebar" class="bg-cf-black border-r border-cf-dark flex flex-col z-40 flex-shrink-0 text-white relative">
+    <aside id="sidebar" class="bg-cf-black border-r border-cf-dark flex flex-col z-20 flex-shrink-0 text-white relative">
         <div class="h-16 flex items-center px-4 border-b border-cf-dark w-full overflow-hidden relative">
             <div class="h-8 w-8 rounded flex items-center justify-center bg-black flex-shrink-0 z-10">
                  <img src="https://i.ibb.co/DftDQgGM/IMG-6937.jpg" alt="Logo" class="h-full w-full object-cover rounded">
@@ -124,10 +116,8 @@
         </div>
     </aside>
 
-    <!-- Main Content Column -->
-    <div class="flex-1 flex flex-col min-w-0 overflow-hidden relative">
-        
-        <!-- Minimalist Top Header Bar -->
+    <!-- Main Content -->
+<!-- Minimalist Top Header Bar -->
         <header id="top-header" class="h-16 flex items-center justify-between px-6 z-30 flex-shrink-0 border-b border-gray-200">
             
             <!-- Left: Empty (to maintain flexbox centering balance) -->
@@ -144,17 +134,8 @@
             </div>
         </header>
 
-        <!-- Scrollable Main Container -->
-        <!-- FIXED: Removed pt-20 because header is no longer absolute -->
         <main class="flex-1 overflow-y-auto flex flex-col">
             <div class="p-4 md:p-8 flex-1">
-                
-                <!-- Overview Title (Restored right below the header area) -->
-                <div class="max-w-5xl mx-auto mb-6">
-                    <h1 id="categoryTitle" class="text-3xl font-light text-gray-800 tracking-wide">Overview</h1>
-                </div>
-
-                <!-- Search Bar (Functioning) -->
                 <div class="max-w-5xl mx-auto bg-white rounded-lg border border-gray-200 shadow-sm p-2 mb-8 flex items-center focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500 transition-all">
                     <svg class="h-5 w-5 text-gray-400 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -162,7 +143,6 @@
                     <input type="text" placeholder="Search catalog..." class="w-full ml-3 outline-none text-sm text-gray-600" onkeyup="searchProducts(this.value)">
                 </div>
 
-                <!-- Product Grid -->
                 <div class="max-w-5xl mx-auto bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden mb-8">
                     <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
                         <h2 class="font-medium text-gray-800">Product List</h2>
@@ -252,6 +232,7 @@
             return colors[Math.abs(hash) % colors.length];
         }
 
+        // --- INSTAGRAM CAROUSEL LOGIC ---
         function openMedia(imageUrl, videoUrl, event) {
             event.stopPropagation();
             
@@ -265,6 +246,7 @@
             const modalVid = document.getElementById('modalVid');
 
             if (hasVideo) {
+                // Robust YouTube ID extraction (handles standard, shorts, and ?feature=share)
                 let videoId = "";
                 const ytRegex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?|shorts)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i;
                 const match = videoUrl.match(ytRegex);
@@ -272,6 +254,7 @@
                     videoId = match[1];
                     modalVid.src = `https://www.youtube.com/embed/${videoId}?autoplay=0&rel=0`;
                 } else {
+                    // Fallback if it's an unrecognized format
                     modalVid.src = videoUrl;
                 }
                 
@@ -340,6 +323,7 @@
                 if (event.key === 'Escape') closeMedia();
             }
         });
+        // --- END CAROUSEL LOGIC ---
 
         function renderProducts(products) {
             const grid = document.getElementById('product-grid');
@@ -359,9 +343,11 @@
 
                 const card = `
                     <div class="border border-gray-200 rounded-lg overflow-hidden bg-white hover:border-blue-400 transition-colors flex flex-col group">
+                        <!-- Click passes both image AND video URL -->
                         <div class="relative aspect-[4/5] bg-gray-100 cursor-pointer overflow-hidden" onclick="openMedia('${product.image_url}', ${vidArg}, event)">
                             <img src="${product.image_url}" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/400x500?text=Image+Removed'">
                             
+                            <!-- Video Icon Indicator if video exists -->
                             ${product.video_url ? `
                             <div class="absolute top-2 right-2 bg-black bg-opacity-60 rounded-full p-1.5 z-10">
                                 <svg class="h-4 w-4 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z" /></svg>
@@ -442,6 +428,7 @@
                 const catList = document.getElementById('categoryList');
                 catList.innerHTML = createSidebarItem('All');
 
+                // FIXED: Changed "padding" back to "Set"
                 const categories = [...new Set(allProducts.map(p => p.category).filter(c => c))];
                 categories.forEach(cat => {
                     catList.innerHTML += createSidebarItem(cat);
