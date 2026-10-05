@@ -13,35 +13,70 @@
         ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
         
-        /* Helper class to hide text when sidebar is collapsed */
-        .sidebar-collapsed .sidebar-text { display: none; }
-        /* Adjusted collapsed width slightly to center the logo perfectly */
-        .sidebar-collapsed { width: 4.5rem; } 
+        /* Cloudflare Sidebar Animation CSS */
+        #sidebar {
+            width: 16rem; /* 256px open */
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        #sidebar.sidebar-collapsed {
+            width: 4rem; /* 64px closed */
+        }
+        /* Instantly hide text to prevent ugly wrapping during animation */
+        #sidebar.sidebar-collapsed .sidebar-text {
+            opacity: 0;
+            pointer-events: none;
+            position: absolute;
+        }
+        #sidebar:not(.sidebar-collapsed) .sidebar-text {
+            opacity: 1;
+            transition: opacity 0.2s ease-in 0.1s; /* fade in slightly after width expands */
+        }
+        
+        /* Center elements when collapsed */
+        #sidebar.sidebar-collapsed .cf-nav-item {
+            justify-content: center;
+            padding-left: 0;
+            padding-right: 0;
+        }
+        #sidebar.sidebar-collapsed .logo-container {
+            justify-content: center;
+        }
+        
+        /* Pitch Black Override */
+        .bg-cf-black { background-color: #000000; }
+        .border-cf-dark { border-color: #333333; }
     </style>
 </head>
 <body class="text-gray-800 flex h-screen overflow-hidden">
 
-    <!-- Left Persistent Sidebar (NOW BLACK) -->
-    <!-- Changed bg-white to bg-gray-900 and text to white/gray-400 -->
-    <aside id="sidebar" class="w-64 bg-gray-900 border-r border-gray-800 flex flex-col transition-all duration-300 z-20 flex-shrink-0">
+    <!-- Left Persistent Sidebar (PITCH BLACK) -->
+    <aside id="sidebar" class="bg-cf-black border-r border-cf-dark flex flex-col z-20 flex-shrink-0 text-white relative">
         
         <!-- Top Logo Area -->
-        <!-- Adjusted padding and centering for both states -->
-        <div class="h-16 flex items-center px-4 border-b border-gray-800 justify-center sidebar-collapsed:px-0">
-            <div class="flex items-center overflow-hidden w-full px-2">
-                <!-- Made the logo slightly smaller (h-7 w-7) so it doesn't look cramped -->
-                <img src="https://i.ibb.co/DftDQgGM/IMG-6937.jpg" alt="Logo" class="h-7 w-7 rounded bg-black flex-shrink-0 mx-auto sidebar-collapsed:mx-0">
-                <span class="ml-3 font-semibold text-sm text-white sidebar-text whitespace-nowrap">Shaheen Kapda Ghar</span>
-            </div>
+        <div class="h-16 flex items-center px-5 border-b border-cf-dark logo-container transition-all duration-300">
+            <img src="https://i.ibb.co/DftDQgGM/IMG-6937.jpg" alt="Logo" class="h-8 w-8 rounded flex-shrink-0 bg-white">
+            <!-- Text fades out and positions absolutely when closed -->
+            <span class="ml-3 font-semibold text-sm sidebar-text whitespace-nowrap overflow-hidden">Shaheen Kapda Ghar</span>
         </div>
         
         <!-- Category Navigation -->
         <nav class="flex-1 overflow-y-auto py-4 overflow-x-hidden">
-            <p class="px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 sidebar-text">Categories</p>
+            <p class="px-5 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 sidebar-text">Categories</p>
             <ul id="categoryList" class="space-y-1">
                 <!-- Dynamic categories inject here -->
             </ul>
         </nav>
+
+        <!-- Bottom Toggle Button (Cloudflare Style) -->
+        <div class="border-t border-cf-dark p-2">
+            <button onclick="toggleSidebar()" class="w-full flex items-center p-3 text-gray-400 hover:text-white hover:bg-gray-800 rounded transition-colors cf-nav-item">
+                <!-- Hamburger Icon -->
+                <svg class="h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+                <span class="ml-3 text-sm font-medium sidebar-text whitespace-nowrap">Collapse menu</span>
+            </button>
+        </div>
     </aside>
 
     <!-- Main Content Area -->
@@ -49,12 +84,6 @@
         <!-- Top Header Bar -->
         <header class="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6 z-10 flex-shrink-0">
             <div class="flex items-center flex-1">
-                <!-- Universal Toggle Button (Desktop & Mobile) -->
-                <button onclick="toggleSidebar()" class="mr-4 text-gray-500 hover:text-black focus:outline-none">
-                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                </button>
                 <h1 id="categoryTitle" class="text-xl font-semibold text-gray-800">Overview</h1>
             </div>
             <div>
@@ -62,11 +91,11 @@
             </div>
         </header>
 
-        <!-- Scrollable Content Container (Flex column to push footer to bottom) -->
+        <!-- Scrollable Content Container -->
         <main class="flex-1 overflow-y-auto flex flex-col">
             <div class="p-4 md:p-8 flex-1">
                 <!-- Search Bar -->
-                <div class="max-w-5xl mx-auto bg-white rounded-lg border border-gray-200 shadow-sm p-2 mb-8 flex items-center">
+                <div class="max-w-5xl mx-auto bg-white rounded-lg border border-gray-200 shadow-sm p-2 mb-8 flex items-center focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500 transition-all">
                     <svg class="h-5 w-5 text-gray-400 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
@@ -75,9 +104,9 @@
 
                 <!-- Product Grid -->
                 <div class="max-w-5xl mx-auto bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden mb-8">
-                    <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center">
+                    <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
                         <h2 class="font-medium text-gray-800">Product List</h2>
-                        <span id="productCount" class="text-xs font-medium bg-gray-100 text-gray-600 px-2 py-1 rounded-full">0 items</span>
+                        <span id="productCount" class="text-xs font-medium bg-gray-200 text-gray-700 px-2 py-1 rounded-full">0 items</span>
                     </div>
                     
                     <div id="product-grid" class="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -86,7 +115,7 @@
                 </div>
             </div>
 
-            <!-- RESTORED FOOTER -->
+            <!-- Footer -->
             <footer class="bg-white border-t border-gray-200 py-6 text-center text-sm text-gray-500 w-full mt-auto">
                 <p>&copy; 2026 Shaheen Kapda Ghar. All rights reserved.</p>
             </footer>
@@ -108,19 +137,16 @@
         let allProducts = []; 
         let currentCategory = 'All';
 
-        // Universal Sidebar Toggle
+        // Sidebar Toggle Logic
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             sidebar.classList.toggle('sidebar-collapsed');
-            sidebar.classList.toggle('w-64');
         }
 
-        // Helper to get initials (e.g., "All Products" -> "AP", "Sale" -> "S")
         function getInitials(name) {
             return name.split(' ').map(word => word.charAt(0).toUpperCase()).slice(0, 2).join('');
         }
 
-        // Helper to generate a consistent color based on the category name
         function getColor(name) {
             const colors = ['bg-red-100 text-red-600', 'bg-blue-100 text-blue-600', 'bg-green-100 text-green-600', 'bg-purple-100 text-purple-600', 'bg-yellow-100 text-yellow-700', 'bg-pink-100 text-pink-600', 'bg-indigo-100 text-indigo-600'];
             let hash = 0;
@@ -128,7 +154,6 @@
             return colors[Math.abs(hash) % colors.length];
         }
 
-        // Image Popup Logic
         function openImage(url, event) {
             event.stopPropagation();
             const modal = document.getElementById('imageModal');
@@ -151,7 +176,6 @@
             }, 300);
         }
 
-        // Render Products
         function renderProducts(products) {
             const grid = document.getElementById('product-grid');
             document.getElementById('productCount').innerText = `${products.length} items`;
@@ -196,7 +220,6 @@
             });
         }
 
-        // Sidebar Filtering
         function filterCategory(category) {
             currentCategory = category;
             document.getElementById('categoryTitle').innerText = category === 'All' ? 'Overview' : category;
@@ -204,14 +227,12 @@
             const filtered = category === 'All' ? allProducts : allProducts.filter(p => p.category === category);
             renderProducts(filtered);
             
-            // Close sidebar on mobile after clicking (keeps it open on desktop unless manually closed)
+            // On mobile, auto-collapse after picking a category
             if (window.innerWidth < 768) {
                 document.getElementById('sidebar').classList.add('sidebar-collapsed');
-                document.getElementById('sidebar').classList.remove('w-64');
             }
         }
 
-        // Search Box Logic
         function searchProducts(query) {
             const lowerQuery = query.toLowerCase();
             let baseList = currentCategory === 'All' ? allProducts : allProducts.filter(p => p.category === currentCategory);
@@ -224,25 +245,21 @@
             renderProducts(searched);
         }
 
-        // Generate Sidebar Item HTML (Updated for dark sidebar hover effects)
         function createSidebarItem(name) {
             const initials = getInitials(name);
             const colorClass = getColor(name);
             
             return `
                 <li>
-                    <button onclick="filterCategory('${name}')" class="w-full flex items-center px-4 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white transition">
-                        <!-- The Initials Bubble -->
-                        <div class="h-8 w-8 rounded-md flex items-center justify-center font-bold text-xs ${colorClass} flex-shrink-0">
+                    <button onclick="filterCategory('${name}')" class="w-full flex items-center p-3 text-sm text-gray-300 hover:bg-gray-800 hover:text-white transition rounded mx-2 cf-nav-item" style="width: calc(100% - 1rem);">
+                        <div class="h-6 w-6 rounded flex items-center justify-center font-bold text-[10px] ${colorClass} flex-shrink-0">
                             ${initials}
                         </div>
-                        <!-- The Text (Hides when collapsed) -->
                         <span class="ml-3 sidebar-text whitespace-nowrap">${name === 'All' ? 'All Products' : name}</span>
                     </button>
                 </li>`;
         }
 
-        // Initialize
         async function init() {
             try {
                 const response = await fetch('products.json');
@@ -251,10 +268,8 @@
                 
                 const catList = document.getElementById('categoryList');
                 
-                // Add "All Products" first
                 catList.innerHTML = createSidebarItem('All');
 
-                // Add dynamic categories
                 const categories = [...new Set(allProducts.map(p => p.category).filter(c => c))];
                 categories.forEach(cat => {
                     catList.innerHTML += createSidebarItem(cat);
@@ -262,10 +277,9 @@
 
                 renderProducts(allProducts);
                 
-                // Auto-collapse sidebar on mobile screens initially
+                // Start collapsed on mobile
                 if (window.innerWidth < 768) {
                     document.getElementById('sidebar').classList.add('sidebar-collapsed');
-                    document.getElementById('sidebar').classList.remove('w-64');
                 }
             } catch (error) {
                 document.getElementById('product-grid').innerHTML = '<p class="text-red-500 text-sm p-4">Error loading catalog.</p>';
