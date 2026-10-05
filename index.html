@@ -13,12 +13,25 @@
         ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
         
+        /* FIXED: Use fixed positioning and z-index 50 so it overlays cleanly on mobile */
         #sidebar {
             width: 16rem; 
-            transition: width 300ms cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1), width 300ms cubic-bezier(0.4, 0, 0.2, 1);
         }
-        #sidebar.sidebar-collapsed {
-            width: 4rem; 
+        
+        /* Desktop closed state (width squishes) */
+        @media (min-width: 768px) {
+            #sidebar.sidebar-collapsed {
+                width: 4rem; 
+                transform: translateX(0);
+            }
+        }
+        
+        /* Mobile closed state (slides off screen entirely) */
+        @media (max-width: 767px) {
+            #sidebar.sidebar-collapsed {
+                transform: translateX(-100%);
+            }
         }
         
         .sidebar-text {
@@ -36,7 +49,6 @@
         .bg-cf-black { background-color: #000000; }
         .border-cf-dark { border-color: #333333; }
 
-        /* FIXED: Tooltip CSS - always displays on group hover */
         .tooltip {
             visibility: hidden;
             background-color: white;
@@ -46,7 +58,6 @@
             padding: 4px 10px;
             position: absolute;
             z-index: 50;
-            /* Position exactly right of the button */
             top: 50%;
             transform: translateY(-50%);
             left: 100%;
@@ -77,7 +88,6 @@
             border-color: transparent white transparent transparent;
         }
 
-        /* LV Hover Animation Logic */
         #top-header {
             background-color: transparent;
             border-bottom: 1px solid transparent;
@@ -94,8 +104,12 @@
 </head>
 <body class="text-gray-800 flex h-screen overflow-hidden">
 
+    <!-- Mobile Overlay dim background -->
+    <div id="mobileOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden opacity-0 transition-opacity duration-300 md:hidden" onclick="toggleSidebar()"></div>
+
     <!-- Sidebar -->
-    <aside id="sidebar" class="bg-cf-black border-r border-cf-dark flex flex-col z-40 flex-shrink-0 text-white relative">
+    <!-- FIXED: changed absolute to fixed. It stays locked to the left edge -->
+    <aside id="sidebar" class="bg-cf-black border-r border-cf-dark flex flex-col z-50 flex-shrink-0 text-white fixed md:relative h-full top-0 left-0">
         <div class="h-16 flex items-center px-4 border-b border-cf-dark w-full overflow-hidden relative">
             <div class="h-8 w-8 rounded flex items-center justify-center bg-black flex-shrink-0 z-10">
                  <img src="https://i.ibb.co/DftDQgGM/IMG-6937.jpg" alt="Logo" class="h-full w-full object-cover rounded">
@@ -109,39 +123,46 @@
         </nav>
 
         <div class="border-t border-cf-dark p-2 flex items-center justify-start">
-            <!-- FIXED: Button is now a relative group, tooltip is inside it. Removed permanent text. -->
             <button onclick="toggleSidebar()" class="group relative h-10 w-10 flex items-center justify-center text-gray-400 hover:text-white hover:bg-gray-800 rounded transition-colors focus:outline-none flex-shrink-0 ml-2">
                 <svg id="toggleIcon" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path id="togglePath" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2zM9 6v12" />
                 </svg>
-                <!-- Tooltip pops up dynamically based on state -->
-                <span id="tooltipText" class="tooltip">Collapse sidebar</span>
+                <span id="tooltipText" class="tooltip">Collapse sidebar ⌘B</span>
             </button>
         </div>
     </aside>
 
     <!-- Main Content Column -->
-    <div class="flex-1 flex flex-col min-w-0 overflow-hidden relative">
+    <!-- FIXED: w-full ensures it stretches the whole screen on mobile -->
+    <div class="flex-1 flex flex-col w-full min-w-0 overflow-hidden relative transition-all duration-300">
         
-        <!-- Minimalist Top Header Bar -->
-        <header id="top-header" class="h-16 flex items-center justify-between px-6 z-30 flex-shrink-0">
-            <div class="w-1/3"></div>
-            <div class="flex items-center justify-center w-1/3">
-                <span class="text-xl md:text-2xl font-semibold tracking-widest uppercase text-center whitespace-nowrap">Shaheen Kapda Ghar</span>
+        <header id="top-header" class="h-16 flex items-center justify-between px-4 sm:px-6 z-30 flex-shrink-0">
+            <!-- Mobile Hamburger Menu (Only visible on small screens to open sidebar) -->
+            <div class="flex-1 md:hidden flex justify-start">
+                <button onclick="toggleSidebar()" class="text-gray-500 hover:text-black">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
             </div>
-            <div class="flex items-center justify-end w-1/3">
-                <a href="mailto:shahinkapdaghar@gmail.com" class="text-xs uppercase tracking-widest hover:underline font-semibold text-gray-600 hover:text-black transition">Contact us</a>
+            <div class="flex-1 hidden md:block"></div>
+            
+            <div class="flex-shrink-0 flex items-center justify-center">
+                <span class="text-[13px] min-[375px]:text-base sm:text-xl md:text-2xl font-semibold tracking-widest uppercase text-center whitespace-nowrap">Shaheen Kapda Ghar</span>
+            </div>
+            <div class="flex-1 flex items-center justify-end">
+                <a href="mailto:shahinkapdaghar@gmail.com" class="text-[10px] sm:text-xs uppercase tracking-widest hover:underline font-semibold text-gray-600 hover:text-black transition">Contact us</a>
             </div>
         </header>
 
         <main class="flex-1 overflow-y-auto flex flex-col">
-            <div class="p-4 md:p-8 flex-1">
+            <div class="p-3 md:p-8 flex-1">
                 
-                <div class="max-w-5xl mx-auto mb-6">
-                    <h1 id="categoryTitle" class="text-3xl font-light text-gray-800 tracking-wide">Overview</h1>
+                <div class="max-w-5xl mx-auto mb-4 md:mb-6">
+                    <h1 id="categoryTitle" class="text-2xl md:text-3xl font-light text-gray-800 tracking-wide">Overview</h1>
                 </div>
 
-                <div class="max-w-5xl mx-auto bg-white rounded-lg border border-gray-200 shadow-sm p-2 mb-8 flex items-center focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500 transition-all">
+                <div class="max-w-5xl mx-auto bg-white rounded-lg border border-gray-200 shadow-sm p-2 mb-6 flex items-center focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500 transition-all">
                     <svg class="h-5 w-5 text-gray-400 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
@@ -149,19 +170,19 @@
                 </div>
 
                 <div class="max-w-5xl mx-auto mb-8">
-                    <div class="py-4 flex justify-between items-center mb-2">
-                        <h2 class="font-medium text-gray-800">Product List</h2>
-                        <span id="productCount" class="text-xs font-medium bg-white border border-gray-200 text-gray-700 px-3 py-1 rounded-full shadow-sm">0 items</span>
+                    <div class="py-2 md:py-4 flex justify-between items-center mb-2">
+                        <h2 class="text-sm md:text-base font-medium text-gray-800">Product List</h2>
+                        <span id="productCount" class="text-[10px] md:text-xs font-medium bg-white border border-gray-200 text-gray-700 px-3 py-1 rounded-full shadow-sm">0 items</span>
                     </div>
                     
-                    <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div id="product-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-3 md:gap-6">
                         <p class="text-gray-400 text-sm col-span-full">Loading catalog...</p>
                     </div>
                 </div>
             </div>
 
-            <footer class="border-t border-gray-200 py-6 text-center text-sm text-gray-500 w-full mt-auto">
-                <p>&copy; 2026 Shaheen Kapda Ghar. All rights reserved. Maunath Bhanjan, Uttar Pradesh, India</p>
+            <footer class="border-t border-gray-200 py-6 text-center text-xs md:text-sm text-gray-500 w-full mt-auto">
+                <p>&copy; 2026 Shaheen Kapda Ghar. All rights reserved.</p>
             </footer>
         </main>
     </div>
@@ -175,22 +196,18 @@
         <!-- Media Container -->
         <div class="relative w-full max-w-lg h-[80vh] flex items-center justify-center" onclick="event.stopPropagation()">
             
-            <!-- Left Arrow -->
             <button id="prevBtn" class="absolute left-2 text-white bg-black bg-opacity-50 rounded-full p-2 hover:bg-opacity-80 transition z-20 hidden" onclick="changeSlide(-1)">
                 <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
             </button>
 
-            <!-- SLIDE 1: Image -->
             <div id="slideImage" class="absolute inset-0 flex items-center justify-center transition-opacity duration-300 opacity-100">
                 <img id="modalImg" src="" class="max-h-full max-w-full object-contain rounded shadow-2xl">
             </div>
 
-            <!-- SLIDE 2: YouTube Video -->
             <div id="slideVideo" class="absolute inset-0 flex items-center justify-center transition-opacity duration-300 opacity-0 pointer-events-none">
                 <iframe id="modalVid" class="w-full h-full rounded shadow-2xl" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
             </div>
 
-            <!-- Right Arrow -->
             <button id="nextBtn" class="absolute right-2 text-white bg-black bg-opacity-50 rounded-full p-2 hover:bg-opacity-80 transition z-20 hidden" onclick="changeSlide(1)">
                 <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
             </button>
@@ -215,13 +232,22 @@
             const isCollapsed = sidebar.classList.toggle('sidebar-collapsed');
             const path = document.getElementById('togglePath');
             const tooltipText = document.getElementById('tooltipText');
+            const overlay = document.getElementById('mobileOverlay');
 
             if (isCollapsed) {
                 path.setAttribute('d', 'M4 6h16a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2zM15 6v12');
-                tooltipText.innerText = "Expand sidebar";
+                tooltipText.innerText = "Expand sidebar ⌘B";
+                if (overlay) {
+                    overlay.classList.add('opacity-0');
+                    setTimeout(() => overlay.classList.add('hidden'), 300);
+                }
             } else {
                 path.setAttribute('d', 'M4 6h16a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2zM9 6v12');
-                tooltipText.innerText = "Collapse sidebar";
+                tooltipText.innerText = "Collapse sidebar ⌘B";
+                if (overlay && window.innerWidth < 768) {
+                    overlay.classList.remove('hidden');
+                    setTimeout(() => overlay.classList.remove('opacity-0'), 10);
+                }
             }
         }
 
@@ -234,7 +260,6 @@
             return colors[Math.abs(hash) % colors.length];
         }
 
-        // --- INSTAGRAM CAROUSEL LOGIC ---
         function openMedia(imageUrl, videoUrl, event) {
             event.stopPropagation();
             
@@ -329,9 +354,6 @@
             document.getElementById('productCount').innerText = `${products.length} items`;
             grid.innerHTML = ''; 
             
-            // FIXED: Updated grid column count for higher density (up to 4-5 across on desktop)
-            grid.className = 'p-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 md:gap-6';
-            
             if (products.length === 0) {
                 grid.innerHTML = '<p class="text-gray-500 text-sm col-span-full py-4">No products found.</p>';
                 return;
@@ -345,8 +367,6 @@
 
                 const card = `
                     <div class="border border-gray-200 rounded-lg overflow-hidden bg-white hover:border-blue-400 transition-colors flex flex-col group shadow-sm">
-                        
-                        <!-- FIXED: Changed aspect-[4/5] to aspect-[3/4] to make images slightly shorter -->
                         <div class="relative aspect-[3/4] bg-gray-100 cursor-pointer overflow-hidden" onclick="openMedia('${product.image_url}', ${vidArg}, event)">
                             <img src="${product.image_url}" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/400x500?text=Image+Removed'">
                             
@@ -356,20 +376,20 @@
                             </div>` : ''}
 
                             <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all flex items-center justify-center">
-                                <span class="bg-white text-black text-xs font-semibold px-3 py-1 rounded-full opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all">Click to Expand</span>
+                                <span class="bg-white text-black text-[10px] md:text-xs font-semibold px-2 md:px-3 py-1 rounded-full opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all">Click to Expand</span>
                             </div>
                         </div>
                         
                         <div class="p-3 md:p-4 flex flex-col flex-1">
                             <div class="flex justify-between items-start mb-1">
-                                <h3 class="text-sm font-semibold text-gray-900 truncate pr-2">${product.name}</h3>
-                                <span class="text-[10px] font-semibold ${getColor(catDisplay)} px-2 py-0.5 rounded whitespace-nowrap">${catDisplay}</span>
+                                <h3 class="text-xs md:text-sm font-semibold text-gray-900 truncate pr-1">${product.name}</h3>
+                                <span class="text-[9px] md:text-[10px] font-semibold ${getColor(catDisplay)} px-1.5 py-0.5 rounded whitespace-nowrap">${catDisplay}</span>
                             </div>
-                            <p class="text-xs text-gray-500 mb-3">${product.fabric}</p>
+                            <p class="text-[10px] md:text-xs text-gray-500 mb-2 md:mb-3">${product.fabric}</p>
                             
-                            <div class="mt-auto pt-3 border-t border-gray-100 flex items-center justify-between">
-                                <p class="text-sm font-bold text-gray-900">₹${product.price}</p>
-                                <a href="${waUrl}" target="_blank" class="text-xs font-medium text-white bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded transition">
+                            <div class="mt-auto pt-2 md:pt-3 border-t border-gray-100 flex items-center justify-between">
+                                <p class="text-xs md:text-sm font-bold text-gray-900">₹${product.price}</p>
+                                <a href="${waUrl}" target="_blank" class="text-[10px] md:text-xs font-medium text-white bg-blue-600 hover:bg-blue-700 px-2 md:px-3 py-1 md:py-1.5 rounded transition">
                                     WhatsApp
                                 </a>
                             </div>
@@ -389,9 +409,9 @@
             
             if (window.innerWidth < 768) {
                 const sidebar = document.getElementById('sidebar');
-                sidebar.classList.add('sidebar-collapsed');
-                document.getElementById('togglePath').setAttribute('d', 'M4 6h16a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2zM15 6v12');
-                document.getElementById('tooltipText').innerText = "Expand sidebar";
+                if (!sidebar.classList.contains('sidebar-collapsed')) {
+                    toggleSidebar();
+                }
             }
         }
 
@@ -442,7 +462,7 @@
                     const sidebar = document.getElementById('sidebar');
                     sidebar.classList.add('sidebar-collapsed');
                     document.getElementById('togglePath').setAttribute('d', 'M4 6h16a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2zM15 6v12');
-                    document.getElementById('tooltipText').innerText = "Expand sidebar";
+                    document.getElementById('tooltipText').innerText = "Expand sidebar ⌘B";
                 }
             } catch (error) {
                 console.error("Fetch Error:", error);
