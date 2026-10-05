@@ -71,37 +71,36 @@
             border-style: solid;
             border-color: transparent white transparent transparent;
         }
-/* Louis Vuitton Style Header Hover Animation */
-    #top-header {
-        /* Default state: transparent background, white text */
-        background-color: transparent;
-        color: white;
-        transition: background-color 0.3s ease, color 0.3s ease;
-    }
-    
-    #top-header:hover {
-        /* Hover state: solid white background, dark text */
-        background-color: white;
-        color: #1f2937; /* Tailwind gray-800 */
-    }
-    
-    /* Ensure SVG icons match the text color during transition */
-    #top-header svg {
-        transition: stroke 0.3s ease, fill 0.3s ease;
-        stroke: currentColor;
-    }
-    
-    /* Force child links to inherit the transitioning color */
-    #top-header a, #top-header span {
-        color: inherit;
-        transition: color 0.3s ease;
-    }
+
+        /* FIXED: Header Hover Animation */
+        #top-header {
+            /* Start transparent, but text MUST be dark so it is visible against the body background */
+            background-color: transparent;
+            color: #1f2937; /* Tailwind gray-800 */
+            transition: background-color 0.3s ease;
+        }
+        
+        #top-header:hover {
+            /* Hover state: solid white background and a subtle shadow */
+            background-color: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+        
+        #top-header svg {
+            transition: stroke 0.3s ease, fill 0.3s ease;
+            stroke: currentColor;
+        }
+        
+        #top-header a, #top-header span {
+            color: inherit;
+            transition: color 0.3s ease;
+        }
     </style>
 </head>
 <body class="text-gray-800 flex h-screen overflow-hidden">
 
     <!-- Sidebar -->
-    <aside id="sidebar" class="bg-cf-black border-r border-cf-dark flex flex-col z-20 flex-shrink-0 text-white relative">
+    <aside id="sidebar" class="bg-cf-black border-r border-cf-dark flex flex-col z-40 flex-shrink-0 text-white relative">
         <div class="h-16 flex items-center px-4 border-b border-cf-dark w-full overflow-hidden relative">
             <div class="h-8 w-8 rounded flex items-center justify-center bg-black flex-shrink-0 z-10">
                  <img src="https://i.ibb.co/DftDQgGM/IMG-6937.jpg" alt="Logo" class="h-full w-full object-cover rounded">
@@ -125,15 +124,15 @@
         </div>
     </aside>
 
-    <!-- Main Content -->
-<!-- Top Header Bar (Louis Vuitton Style) -->
-        <!-- The absolute positioning overlays it on top of the content below it initially -->
-        <header id="top-header" class="absolute top-0 left-0 right-0 h-16 flex items-center justify-between px-6 z-30">
+    <!-- Main Content Column -->
+    <div class="flex-1 flex flex-col min-w-0 overflow-hidden relative">
+        
+        <!-- Top Header Bar -->
+        <!-- FIXED: Removed absolute positioning. It now sits naturally at the top of this column -->
+        <header id="top-header" class="h-16 flex items-center justify-between px-6 z-30 flex-shrink-0">
             
             <!-- Left: Toggle & Search -->
             <div class="flex items-center space-x-6 w-1/3">
-                <!-- Universal Toggle Button (Desktop & Mobile) -->
-                <!-- Notice we removed hover:text-black because the CSS handles the color change now -->
                 <button onclick="toggleSidebar()" class="focus:outline-none flex items-center group">
                     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16" />
@@ -141,7 +140,6 @@
                     <span class="ml-2 text-xs uppercase tracking-widest hidden sm:block">Menu</span>
                 </button>
                 
-                <!-- Search Trigger (Just an icon/text for now to match LV) -->
                 <div class="flex items-center cursor-pointer hidden sm:flex">
                     <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -158,7 +156,6 @@
             <!-- Right: Contact -->
             <div class="flex items-center justify-end w-1/3 space-x-6">
                 <a href="mailto:shahinkapdaghar@gmail.com" class="text-xs uppercase tracking-widest hover:underline hidden sm:block">Contact us</a>
-                <!-- Placeholder icons to match the LV layout balance -->
                 <svg class="h-5 w-5 hidden sm:block cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                 </svg>
@@ -168,8 +165,17 @@
             </div>
         </header>
 
+        <!-- Scrollable Main Container -->
+        <!-- FIXED: Removed pt-20 because header is no longer absolute -->
         <main class="flex-1 overflow-y-auto flex flex-col">
             <div class="p-4 md:p-8 flex-1">
+                
+                <!-- Overview Title (Restored right below the header area) -->
+                <div class="max-w-5xl mx-auto mb-6">
+                    <h1 id="categoryTitle" class="text-3xl font-light text-gray-800 tracking-wide">Overview</h1>
+                </div>
+
+                <!-- Search Bar (Functioning) -->
                 <div class="max-w-5xl mx-auto bg-white rounded-lg border border-gray-200 shadow-sm p-2 mb-8 flex items-center focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500 transition-all">
                     <svg class="h-5 w-5 text-gray-400 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -177,6 +183,7 @@
                     <input type="text" placeholder="Search catalog..." class="w-full ml-3 outline-none text-sm text-gray-600" onkeyup="searchProducts(this.value)">
                 </div>
 
+                <!-- Product Grid -->
                 <div class="max-w-5xl mx-auto bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden mb-8">
                     <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
                         <h2 class="font-medium text-gray-800">Product List</h2>
@@ -266,7 +273,6 @@
             return colors[Math.abs(hash) % colors.length];
         }
 
-        // --- INSTAGRAM CAROUSEL LOGIC ---
         function openMedia(imageUrl, videoUrl, event) {
             event.stopPropagation();
             
@@ -280,7 +286,6 @@
             const modalVid = document.getElementById('modalVid');
 
             if (hasVideo) {
-                // Robust YouTube ID extraction (handles standard, shorts, and ?feature=share)
                 let videoId = "";
                 const ytRegex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?|shorts)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i;
                 const match = videoUrl.match(ytRegex);
@@ -288,7 +293,6 @@
                     videoId = match[1];
                     modalVid.src = `https://www.youtube.com/embed/${videoId}?autoplay=0&rel=0`;
                 } else {
-                    // Fallback if it's an unrecognized format
                     modalVid.src = videoUrl;
                 }
                 
@@ -357,7 +361,6 @@
                 if (event.key === 'Escape') closeMedia();
             }
         });
-        // --- END CAROUSEL LOGIC ---
 
         function renderProducts(products) {
             const grid = document.getElementById('product-grid');
@@ -377,11 +380,9 @@
 
                 const card = `
                     <div class="border border-gray-200 rounded-lg overflow-hidden bg-white hover:border-blue-400 transition-colors flex flex-col group">
-                        <!-- Click passes both image AND video URL -->
                         <div class="relative aspect-[4/5] bg-gray-100 cursor-pointer overflow-hidden" onclick="openMedia('${product.image_url}', ${vidArg}, event)">
                             <img src="${product.image_url}" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/400x500?text=Image+Removed'">
                             
-                            <!-- Video Icon Indicator if video exists -->
                             ${product.video_url ? `
                             <div class="absolute top-2 right-2 bg-black bg-opacity-60 rounded-full p-1.5 z-10">
                                 <svg class="h-4 w-4 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z" /></svg>
@@ -462,7 +463,6 @@
                 const catList = document.getElementById('categoryList');
                 catList.innerHTML = createSidebarItem('All');
 
-                // FIXED: Changed "padding" back to "Set"
                 const categories = [...new Set(allProducts.map(p => p.category).filter(c => c))];
                 categories.forEach(cat => {
                     catList.innerHTML += createSidebarItem(cat);
