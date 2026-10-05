@@ -133,7 +133,7 @@
             </div>
 
             <footer class="bg-white border-t border-gray-200 py-6 text-center text-sm text-gray-500 w-full mt-auto">
-                <p>&copy; 2026 Shaheen Kapda Ghar. All rights reserved.</p>
+                <p>&copy; 2026 Shaheen Kapda Ghar. All rights reserved. Maunath Bhanjan, Uttar Pradesh, India</p>
             </footer>
         </main>
     </div>
@@ -223,8 +223,17 @@
             const modalVid = document.getElementById('modalVid');
 
             if (hasVideo) {
-                let videoId = videoUrl.split('/').pop().split('?')[0]; 
-                modalVid.src = `https://www.youtube.com/embed/${videoId}?autoplay=0&rel=0`;
+                // Robust YouTube ID extraction (handles standard, shorts, and ?feature=share)
+                let videoId = "";
+                const ytRegex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?|shorts)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i;
+                const match = videoUrl.match(ytRegex);
+                if (match && match[1]) {
+                    videoId = match[1];
+                    modalVid.src = `https://www.youtube.com/embed/${videoId}?autoplay=0&rel=0`;
+                } else {
+                    // Fallback if it's an unrecognized format
+                    modalVid.src = videoUrl;
+                }
                 
                 prevBtn.classList.remove('hidden');
                 nextBtn.classList.remove('hidden');
