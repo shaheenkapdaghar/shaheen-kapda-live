@@ -9,5 +9,26 @@
             "White based multi-colour flowers in small size"
         ],
         "image_url": "https://i.ibb.co/Rp2NVFwx/0adfdc834a26.jpg"
+    },
+    {
+        "id": "7836dd52",
+        "name": "Print",
+        "price": "100",
+        "fabric": "Ryon",
+        "category": "Print",
+        "colors": [
+            "Multi-Colour"
+        ],
+        "image_url": "https://i.ibb.co/0VVz5rGh/5b53447cf7ed.jpg",
+        "media": [
+            {
+                "type": "image",
+                "url": "https://i.ibb.co/0VVz5rGh/5b53447cf7ed.jpg"
+            },
+            {
+                "type": "video",
+                "url": "https://youtube.com/shorts/yhXc4C788Mk?feature=share"
+            }
+        ]
     }
 ]
