@@ -46,5 +46,17 @@
         ],
         "image_url": "https://i.ibb.co/JRFkCfwL/054dd93c5123.jpg",
         "video_url": "https://youtube.com/shorts/rb00s832amY?feature=share"
+    },
+    {
+        "id": "b8ce3399",
+        "name": "Print",
+        "price": "100",
+        "fabric": "Ryon",
+        "category": "Print",
+        "colors": [
+            "Brown and Cream Colour (Bobby Print)"
+        ],
+        "image_url": "https://i.ibb.co/0VWZfH6p/8dc2aa9c8f40.jpg",
+        "video_url": "https://youtube.com/shorts/OxV-DnJDoko?feature=share"
     }
 ]
