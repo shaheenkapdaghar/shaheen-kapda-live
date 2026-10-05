@@ -14,12 +14,13 @@
         ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
         
         #sidebar {
-            width: 16rem;
+            width: 16rem; 
             transition: width 300ms cubic-bezier(0.4, 0, 0.2, 1);
         }
         #sidebar.sidebar-collapsed {
-            width: 4rem;
+            width: 4rem; 
         }
+        
         .sidebar-text {
             transition: opacity 200ms ease-in-out;
             opacity: 1;
@@ -31,8 +32,10 @@
             position: absolute; 
             visibility: hidden;
         }
+        
         .bg-cf-black { background-color: #000000; }
         .border-cf-dark { border-color: #333333; }
+
         .tooltip {
             visibility: hidden;
             background-color: white;
@@ -47,15 +50,17 @@
             transition: opacity 0.2s;
             font-size: 0.85rem;
             font-weight: 500;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             border: 1px solid #e5e7eb;
             white-space: nowrap;
-            pointer-events: none;
+            pointer-events: none; 
         }
+        
         #sidebar.sidebar-collapsed .toggle-container:hover .tooltip {
             visibility: visible;
             opacity: 1;
         }
+
         .tooltip::after {
             content: "";
             position: absolute;
@@ -78,10 +83,12 @@
             </div>
             <span class="ml-3 font-semibold text-sm sidebar-text">Shaheen Kapda Ghar</span>
         </div>
+        
         <nav class="flex-1 overflow-y-auto py-4 overflow-x-hidden">
             <p class="px-5 text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-3 sidebar-text">Categories</p>
             <ul id="categoryList" class="space-y-1"></ul>
         </nav>
+
         <div class="border-t border-cf-dark p-2 flex items-center justify-start relative toggle-container">
             <button onclick="toggleSidebar()" class="h-10 w-10 flex items-center justify-center text-gray-400 hover:text-white hover:bg-gray-800 rounded transition-colors focus:outline-none flex-shrink-0">
                 <svg id="toggleIcon" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -93,16 +100,20 @@
         </div>
     </aside>
 
-    <!-- Main Content Area -->
+    <!-- Main Content -->
     <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
         <header class="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6 z-10 flex-shrink-0">
-            <h1 id="categoryTitle" class="text-xl font-semibold text-gray-800">Overview</h1>
-            <a href="mailto:shahinkapdaghar@gmail.com" class="text-sm font-medium text-blue-600 hover:text-blue-800">Support</a>
+            <div class="flex items-center flex-1">
+                <h1 id="categoryTitle" class="text-xl font-semibold text-gray-800">Overview</h1>
+            </div>
+            <div>
+                <a href="mailto:shahinkapdaghar@gmail.com" class="text-sm font-medium text-blue-600 hover:text-blue-800">Support</a>
+            </div>
         </header>
 
         <main class="flex-1 overflow-y-auto flex flex-col">
             <div class="p-4 md:p-8 flex-1">
-                <div class="max-w-5xl mx-auto bg-white rounded-lg border border-gray-200 shadow-sm p-2 mb-8 flex items-center">
+                <div class="max-w-5xl mx-auto bg-white rounded-lg border border-gray-200 shadow-sm p-2 mb-8 flex items-center focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500 transition-all">
                     <svg class="h-5 w-5 text-gray-400 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
@@ -114,47 +125,53 @@
                         <h2 class="font-medium text-gray-800">Product List</h2>
                         <span id="productCount" class="text-xs font-medium bg-gray-200 text-gray-700 px-2 py-1 rounded-full">0 items</span>
                     </div>
+                    
                     <div id="product-grid" class="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         <p class="text-gray-400 text-sm col-span-full">Loading catalog...</p>
                     </div>
                 </div>
             </div>
+
             <footer class="bg-white border-t border-gray-200 py-6 text-center text-sm text-gray-500 w-full mt-auto">
-                <p>&copy; 2026 Shaheen Kapda Ghar. All rights reserved.</p>
+                <p>&copy; 2026 Shaheen Kapda Ghar. All rights reserved. Maunath Bhanjan, Uttar Pradesh, India</p>
             </footer>
         </main>
     </div>
 
-    <!-- INSTAGRAM STYLE CAROUSEL MODAL -->
-    <div id="imageModal" class="fixed inset-0 bg-black bg-opacity-95 z-50 hidden flex flex-col justify-center items-center opacity-0 transition-opacity duration-300">
-        <!-- Close Button -->
-        <button class="absolute top-6 right-6 text-white hover:text-gray-300 z-50 p-2" onclick="closeModal()">
-            <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
+    <!-- FULL SCREEN INSTAGRAM CAROUSEL MODAL (IMAGE + VIDEO) -->
+    <div id="mediaModal" class="fixed inset-0 bg-black bg-opacity-95 z-50 hidden flex flex-col justify-center items-center opacity-0 transition-opacity duration-300" onclick="closeMedia()">
+        <button class="absolute top-6 right-6 text-white hover:text-gray-300 z-50" onclick="closeMedia()">
+            <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
         </button>
 
-        <!-- Carousel Container -->
-        <div class="relative max-w-[90vw] max-h-[80vh] flex items-center justify-center">
-            <!-- Left Navigation Arrow -->
-            <button id="prevBtn" onclick="prevSlide()" class="absolute left-4 bg-white/20 hover:bg-white/40 text-white rounded-full p-2 z-10 transition hidden md:block">
-                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        <!-- Media Container -->
+        <div class="relative w-full max-w-lg h-[80vh] flex items-center justify-center" onclick="event.stopPropagation()">
+            
+            <!-- Left Arrow -->
+            <button id="prevBtn" class="absolute left-2 text-white bg-black bg-opacity-50 rounded-full p-2 hover:bg-opacity-80 transition z-20 hidden" onclick="changeSlide(-1)">
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
             </button>
 
-            <!-- Media Display Area -->
-            <div id="carouselMediaContainer" class="flex items-center justify-center overflow-hidden rounded-lg">
-                <!-- Dynamically Injected Media (Img or Video) -->
+            <!-- SLIDE 1: Image -->
+            <div id="slideImage" class="absolute inset-0 flex items-center justify-center transition-opacity duration-300 opacity-100">
+                <img id="modalImg" src="" class="max-h-full max-w-full object-contain rounded shadow-2xl">
             </div>
 
-            <!-- Right Navigation Arrow -->
-            <button id="nextBtn" onclick="nextSlide()" class="absolute right-4 bg-white/20 hover:bg-white/40 text-white rounded-full p-2 z-10 transition hidden md:block">
-                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            <!-- SLIDE 2: YouTube Video -->
+            <div id="slideVideo" class="absolute inset-0 flex items-center justify-center transition-opacity duration-300 opacity-0 pointer-events-none">
+                <iframe id="modalVid" class="w-full h-full rounded shadow-2xl" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+            </div>
+
+            <!-- Right Arrow -->
+            <button id="nextBtn" class="absolute right-2 text-white bg-black bg-opacity-50 rounded-full p-2 hover:bg-opacity-80 transition z-20 hidden" onclick="changeSlide(1)">
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
             </button>
         </div>
 
-        <!-- Instagram Style Three Horizontal Dots / Indicators -->
-        <div id="carouselDots" class="flex items-center justify-center space-x-2 mt-4">
-            <!-- Dynamic Dots -->
+        <!-- Instagram-Style Navigation Dots -->
+        <div id="navDots" class="mt-6 flex space-x-2 hidden" onclick="event.stopPropagation()">
+            <div id="dot0" class="h-2 w-2 rounded-full bg-white transition-colors cursor-pointer" onclick="goToSlide(0)"></div>
+            <div id="dot1" class="h-2 w-2 rounded-full bg-gray-600 transition-colors cursor-pointer" onclick="goToSlide(1)"></div>
         </div>
     </div>
 
@@ -162,10 +179,8 @@
         const WHATSAPP_NUMBER = "919999950662"; 
         let allProducts = []; 
         let currentCategory = 'All';
-        
-        // Carousel State Variables
-        let currentMediaList = [];
-        let currentIndex = 0;
+        let currentSlide = 0;
+        let hasVideo = false;
 
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
@@ -185,9 +200,7 @@
             }
         }
 
-        function getInitials(name) {
-            return name.split(' ').map(word => word.charAt(0).toUpperCase()).slice(0, 2).join('');
-        }
+        function getInitials(name) { return name.split(' ').map(word => word.charAt(0).toUpperCase()).slice(0, 2).join(''); }
 
         function getColor(name) {
             const colors = ['bg-red-100 text-red-600', 'bg-blue-100 text-blue-600', 'bg-green-100 text-green-600', 'bg-purple-100 text-purple-600', 'bg-yellow-100 text-yellow-700', 'bg-pink-100 text-pink-600', 'bg-indigo-100 text-indigo-600'];
@@ -196,109 +209,89 @@
             return colors[Math.abs(hash) % colors.length];
         }
 
-        // --- INSTAGRAM CAROUSEL MODAL LOGIC ---
-        function openCarousel(productJsonString, event) {
+        // --- INSTAGRAM CAROUSEL LOGIC ---
+        function openMedia(imageUrl, videoUrl, event) {
             event.stopPropagation();
-            const product = JSON.parse(decodeURIComponent(productJsonString));
             
-            // Fallback if product only has old image_url
-            currentMediaList = product.media && product.media.length > 0 
-                ? product.media 
-                : [{ type: 'image', url: product.image_url }];
+            document.getElementById('modalImg').src = imageUrl;
             
-            currentIndex = 0;
-            renderCarouselSlide();
+            hasVideo = !!(videoUrl && videoUrl.trim() !== "");
+            const modal = document.getElementById('mediaModal');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const navDots = document.getElementById('navDots');
+            const modalVid = document.getElementById('modalVid');
 
-            const modal = document.getElementById('imageModal');
+            if (hasVideo) {
+                let videoId = videoUrl.split('/').pop().split('?')[0]; 
+                modalVid.src = `https://www.youtube.com/embed/${videoId}?autoplay=0&rel=0`;
+                
+                prevBtn.classList.remove('hidden');
+                nextBtn.classList.remove('hidden');
+                navDots.classList.remove('hidden');
+            } else {
+                modalVid.src = "";
+                prevBtn.classList.add('hidden');
+                nextBtn.classList.add('hidden');
+                navDots.classList.add('hidden');
+            }
+
+            goToSlide(0);
+
             modal.classList.remove('hidden');
             setTimeout(() => modal.classList.remove('opacity-0'), 10);
         }
 
-        function closeModal() {
-            const modal = document.getElementById('imageModal');
+        function closeMedia() {
+            const modal = document.getElementById('mediaModal');
             modal.classList.add('opacity-0');
-            setTimeout(() => {
-                modal.classList.add('hidden');
-                // Stop any playing videos when closing
-                document.getElementById('carouselMediaContainer').innerHTML = '';
-            }, 300);
+            document.getElementById('modalVid').src = "";
+            setTimeout(() => modal.classList.add('hidden'), 300);
         }
 
-        function renderCarouselSlide() {
-            const container = document.getElementById('carouselMediaContainer');
-            const dotsContainer = document.getElementById('carouselDots');
-            const prevBtn = document.getElementById('prevBtn');
-            const nextBtn = document.getElementById('nextBtn');
+        function changeSlide(direction) {
+            if (!hasVideo) return;
+            let next = currentSlide + direction;
+            if (next > 1) next = 0;
+            if (next < 0) next = 1;
+            goToSlide(next);
+        }
 
-            container.innerHTML = '';
-            dotsContainer.innerHTML = '';
+        function goToSlide(index) {
+            if (!hasVideo && index === 1) return;
+            currentSlide = index;
 
-            if (currentMediaList.length === 0) return;
+            const slideImg = document.getElementById('slideImage');
+            const slideVid = document.getElementById('slideVideo');
+            const dot0 = document.getElementById('dot0');
+            const dot1 = document.getElementById('dot1');
 
-            // Render current media item
-            const currentItem = currentMediaList[currentIndex];
-            if (currentItem.type === 'video') {
-                container.innerHTML = `
-                    <video src="${currentItem.url}" controls autoplay class="max-h-[80vh] max-w-[90vw] object-contain rounded-lg shadow-2xl" style="outline: none;"></video>
-                `;
+            if (currentSlide === 0) {
+                slideImg.classList.replace('opacity-0', 'opacity-100');
+                slideImg.classList.remove('pointer-events-none');
+                slideVid.classList.replace('opacity-100', 'opacity-0');
+                slideVid.classList.add('pointer-events-none');
+                dot0.classList.replace('bg-gray-600', 'bg-white');
+                dot1.classList.replace('bg-white', 'bg-gray-600');
             } else {
-                container.innerHTML = `
-                    <img src="${currentItem.url}" class="max-h-[80vh] max-w-[90vw] object-contain rounded-lg shadow-2xl">
-                `;
-            }
-
-            // Show/Hide navigation arrows based on count
-            if (currentMediaList.length > 1) {
-                prevBtn.style.display = currentIndex > 0 ? 'block' : 'none';
-                nextBtn.style.display = currentIndex < currentMediaList.length - 1 ? 'block' : 'none';
-            } else {
-                prevBtn.style.display = 'none';
-                nextBtn.style.display = 'none';
-            }
-
-            // Render Instagram-style dots indicator
-            currentMediaList.forEach((_, idx) => {
-                const dot = document.createElement('div');
-                dot.className = `h-2 rounded-full transition-all duration-300 ${idx === currentIndex ? 'w-6 bg-white' : 'w-2 bg-white/50'}`;
-                dotsContainer.appendChild(dot);
-            });
-        }
-
-        function nextSlide() {
-            if (currentIndex < currentMediaList.length - 1) {
-                currentIndex++;
-                renderCarouselSlide();
+                slideImg.classList.replace('opacity-100', 'opacity-0');
+                slideImg.classList.add('pointer-events-none');
+                slideVid.classList.replace('opacity-0', 'opacity-100');
+                slideVid.classList.remove('pointer-events-none');
+                dot0.classList.replace('bg-white', 'bg-gray-600');
+                dot1.classList.replace('bg-gray-600', 'bg-white');
             }
         }
 
-        function prevSlide() {
-            if (currentIndex > 0) {
-                currentIndex--;
-                renderCarouselSlide();
-            }
-        }
-
-        // Keyboard navigation (Left/Right arrow keys)
-        document.addEventListener('keydown', (e) => {
-            const modal = document.getElementById('imageModal');
+        document.addEventListener('keydown', function(event) {
+            const modal = document.getElementById('mediaModal');
             if (!modal.classList.contains('hidden')) {
-                if (e.key === 'ArrowRight') nextSlide();
-                if (e.key === 'ArrowLeft') prevSlide();
-                if (e.key === 'Escape') closeModal();
+                if (event.key === 'ArrowRight') changeSlide(1);
+                if (event.key === 'ArrowLeft') changeSlide(-1);
+                if (event.key === 'Escape') closeMedia();
             }
         });
-
-        // Touch swipe support for mobile / touch devices
-        let touchStartX = 0;
-        document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; });
-        document.addEventListener('touchend', e => {
-            const modal = document.getElementById('imageModal');
-            if (!modal.classList.contains('hidden')) {
-                let touchEndX = e.changedTouches[0].screenX;
-                if (touchStartX - touchEndX > 50) nextSlide();
-                if (touchEndX - touchStartX > 50) prevSlide();
-            }
-        });
+        // --- END CAROUSEL LOGIC ---
 
         function renderProducts(products) {
             const grid = document.getElementById('product-grid');
@@ -314,26 +307,22 @@
                 const message = encodeURIComponent(`Hi Shaheen Kapda Ghar, I'm interested in the ${product.name} (Fabric: ${product.fabric}). Can you share more details?`);
                 const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
                 const catDisplay = product.category ? product.category : 'General';
-                const mainImage = product.image_url || (product.media && product.media.length > 0 ? product.media[0].url : '');
-                
-                // Encode product payload for modal
-                const encodedProduct = encodeURIComponent(JSON.stringify(product));
-                const hasMultipleMedia = product.media && product.media.length > 1;
+                const vidArg = product.video_url ? `'${product.video_url}'` : "''";
 
                 const card = `
                     <div class="border border-gray-200 rounded-lg overflow-hidden bg-white hover:border-blue-400 transition-colors flex flex-col group">
-                        <div class="relative aspect-[4/5] bg-gray-100 cursor-pointer overflow-hidden" onclick="openCarousel('${encodedProduct}', event)">
-                            <img src="${mainImage}" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/400x500?text=Image+Removed'">
+                        <!-- Click passes both image AND video URL -->
+                        <div class="relative aspect-[4/5] bg-gray-100 cursor-pointer overflow-hidden" onclick="openMedia('${product.image_url}', ${vidArg}, event)">
+                            <img src="${product.image_url}" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/400x500?text=Image+Removed'">
                             
-                            ${hasMultipleMedia ? `
-                                <div class="absolute top-3 right-3 bg-black/60 text-white text-[10px] font-semibold px-2 py-1 rounded-full flex items-center space-x-1 backdrop-blur-sm">
-                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                                    <span>Swipe</span>
-                                </div>
-                            ` : ''}
+                            <!-- Video Icon Indicator if video exists -->
+                            ${product.video_url ? `
+                            <div class="absolute top-2 right-2 bg-black bg-opacity-60 rounded-full p-1.5 z-10">
+                                <svg class="h-4 w-4 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z" /></svg>
+                            </div>` : ''}
 
                             <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all flex items-center justify-center">
-                                <span class="bg-white text-black text-xs font-semibold px-3 py-1 rounded-full opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all shadow">View Post</span>
+                                <span class="bg-white text-black text-xs font-semibold px-3 py-1 rounded-full opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all">Click to Expand</span>
                             </div>
                         </div>
                         
@@ -360,14 +349,21 @@
         function filterCategory(category) {
             currentCategory = category;
             document.getElementById('categoryTitle').innerText = category === 'All' ? 'Overview' : category;
+            
             const filtered = category === 'All' ? allProducts : allProducts.filter(p => p.category === category);
             renderProducts(filtered);
-            if (window.innerWidth < 768) toggleSidebar();
+            
+            if (window.innerWidth < 768) {
+                const sidebar = document.getElementById('sidebar');
+                sidebar.classList.add('sidebar-collapsed');
+                document.getElementById('togglePath').setAttribute('d', 'M4 6h16a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2zM15 6v12');
+            }
         }
 
         function searchProducts(query) {
             const lowerQuery = query.toLowerCase();
             let baseList = currentCategory === 'All' ? allProducts : allProducts.filter(p => p.category === currentCategory);
+            
             const searched = baseList.filter(p => 
                 p.name.toLowerCase().includes(lowerQuery) || 
                 p.fabric.toLowerCase().includes(lowerQuery) ||
@@ -379,6 +375,7 @@
         function createSidebarItem(name) {
             const initials = getInitials(name);
             const colorClass = getColor(name);
+            
             return `
                 <li>
                     <button onclick="filterCategory('${name}')" class="w-full flex items-center p-2 mt-1 text-sm text-gray-400 hover:bg-gray-800 hover:text-white transition rounded mx-2 cf-nav-item" style="width: calc(100% - 1rem);">
@@ -399,7 +396,7 @@
                 const catList = document.getElementById('categoryList');
                 catList.innerHTML = createSidebarItem('All');
 
-                const categories = [...new Set(allProducts.map(p => p.category).filter(c => c))];
+                const categories = [...new padding(allProducts.map(p => p.category).filter(c => c))];
                 categories.forEach(cat => {
                     catList.innerHTML += createSidebarItem(cat);
                 });
