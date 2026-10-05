@@ -58,5 +58,17 @@
         ],
         "image_url": "https://i.ibb.co/0VWZfH6p/8dc2aa9c8f40.jpg",
         "video_url": "https://youtube.com/shorts/OxV-DnJDoko?feature=share"
+    },
+    {
+        "id": "f520d009",
+        "name": "Collection",
+        "price": "100",
+        "fabric": "Ryon",
+        "category": "Print",
+        "colors": [
+            "Multi-Colour"
+        ],
+        "image_url": "https://i.ibb.co/pvJy7v0t/ed368363692f.jpg",
+        "video_url": ""
     }
 ]
