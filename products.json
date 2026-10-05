@@ -30,5 +30,16 @@
             "1"
         ],
         "image_url": "https://i.ibb.co/G4jXrzDB/04c612e1cb9a.jpg"
+    },
+    {
+        "id": "d408ea6a",
+        "name": "W-Print",
+        "price": "100",
+        "fabric": "Ryon",
+        "category": "Print",
+        "colors": [
+            "White based multi-colour flowers in small size"
+        ],
+        "image_url": "https://i.ibb.co/Rp2NVFwx/0adfdc834a26.jpg"
     }
 ]
