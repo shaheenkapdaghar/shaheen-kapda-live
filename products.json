@@ -22,5 +22,17 @@
         ],
         "image_url": "https://i.ibb.co/0VVz5rGh/5b53447cf7ed.jpg",
         "video_url": "https://youtube.com/shorts/yhXc4C788Mk?feature=share"
+    },
+    {
+        "id": "bc775417",
+        "name": "Print",
+        "price": "100",
+        "fabric": "Ryon",
+        "category": "Print",
+        "colors": [
+            "Multi-Colour"
+        ],
+        "image_url": "https://i.ibb.co/pBxRR0Hv/50fb1e981de5.jpg",
+        "video_url": "https://youtube.com/shorts/bI2pV03sZNs?feature=share"
     }
 ]
