@@ -106,13 +106,22 @@
             <ul id="categoryList" class="space-y-1"></ul>
         </nav>
 
-        <div class="border-t border-cf-dark p-2 flex items-center justify-start relative toggle-container">
-            <button onclick="toggleSidebar()" class="h-10 w-10 flex items-center justify-center text-gray-400 hover:text-white hover:bg-gray-800 rounded transition-colors focus:outline-none flex-shrink-0">
-                <svg id="toggleIcon" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path id="togglePath" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2zM9 6v12" />
-                </svg>
+<div class="border-t border-cf-dark p-2 flex items-center justify-start relative toggle-container">
+            <!-- Added "group w-full" to make the whole row act as one hoverable button -->
+            <button onclick="toggleSidebar()" class="group w-full flex items-center justify-start text-gray-400 hover:text-white rounded transition-colors focus:outline-none">
+                
+                <!-- Icon gets highlighted when group is hovered -->
+                <div class="h-10 w-10 flex items-center justify-center group-hover:bg-gray-800 rounded transition-colors flex-shrink-0">
+                    <svg id="toggleIcon" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path id="togglePath" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2zM9 6v12" />
+                    </svg>
+                </div>
+                
+                <!-- Text also gets highlighted when group is hovered -->
+                <span id="toggleText" class="ml-3 text-sm font-medium sidebar-text whitespace-nowrap text-gray-400 group-hover:text-white transition-colors">Collapse sidebar</span>
             </button>
-            <span id="toggleText" class="ml-3 text-sm font-medium sidebar-text whitespace-nowrap text-gray-400">Collapse sidebar</span>
+            
+            <!-- Tooltip remains exactly the same for when it's closed -->
             <span id="tooltipText" class="tooltip">Expand sidebar ⌘B</span>
         </div>
     </aside>
