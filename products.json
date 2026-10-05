@@ -30,5 +30,26 @@
                 "url": "https://youtube.com/shorts/yhXc4C788Mk?feature=share"
             }
         ]
+    },
+    {
+        "id": "4c215192",
+        "name": "Print",
+        "price": "100",
+        "fabric": "Ryon",
+        "category": "Print",
+        "colors": [
+            "Multi-Colour"
+        ],
+        "image_url": "https://i.ibb.co/6cNcdZvh/21afab892a69.jpg",
+        "media": [
+            {
+                "type": "image",
+                "url": "https://i.ibb.co/6cNcdZvh/21afab892a69.jpg"
+            },
+            {
+                "type": "video",
+                "url": "https://youtube.com/shorts/p2EwdOLm--4?feature=share"
+            }
+        ]
     }
 ]
