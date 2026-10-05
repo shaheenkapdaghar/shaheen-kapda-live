@@ -34,5 +34,17 @@
         ],
         "image_url": "https://i.ibb.co/pBxRR0Hv/50fb1e981de5.jpg",
         "video_url": "https://youtube.com/shorts/bI2pV03sZNs?feature=share"
+    },
+    {
+        "id": "77449565",
+        "name": "Print",
+        "price": "100",
+        "fabric": "Ryon",
+        "category": "Print",
+        "colors": [
+            "Black and White Check Print"
+        ],
+        "image_url": "https://i.ibb.co/JRFkCfwL/054dd93c5123.jpg",
+        "video_url": "https://youtube.com/shorts/rb00s832amY?feature=share"
     }
 ]
