@@ -7,7 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        /* FIXED: Applied Ultra-Light Gray Background */
         body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
@@ -37,6 +36,7 @@
         .bg-cf-black { background-color: #000000; }
         .border-cf-dark { border-color: #333333; }
 
+        /* FIXED: Tooltip CSS - always displays on group hover */
         .tooltip {
             visibility: hidden;
             background-color: white;
@@ -46,7 +46,11 @@
             padding: 4px 10px;
             position: absolute;
             z-index: 50;
-            left: 110%;
+            /* Position exactly right of the button */
+            top: 50%;
+            transform: translateY(-50%);
+            left: 100%;
+            margin-left: 12px; 
             opacity: 0;
             transition: opacity 0.2s;
             font-size: 0.85rem;
@@ -57,7 +61,7 @@
             pointer-events: none; 
         }
         
-        #sidebar.sidebar-collapsed .toggle-container:hover .tooltip {
+        .group:hover .tooltip {
             visibility: visible;
             opacity: 1;
         }
@@ -73,17 +77,15 @@
             border-color: transparent white transparent transparent;
         }
 
-        /* FIXED: The LV Hover Animation Logic */
+        /* LV Hover Animation Logic */
         #top-header {
-            /* Starts completely transparent, letting the light gray body show through */
             background-color: transparent;
             border-bottom: 1px solid transparent;
-            color: #1f2937; /* Keeps text dark so it's readable */
+            color: #1f2937; 
             transition: background-color 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
         }
         
         #top-header:hover {
-            /* On hover, turns solid white and adds a border line to create the "bar" effect */
             background-color: white;
             border-bottom: 1px solid #e5e7eb;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
@@ -106,23 +108,15 @@
             <ul id="categoryList" class="space-y-1"></ul>
         </nav>
 
-<div class="border-t border-cf-dark p-2 flex items-center justify-start relative toggle-container">
-            <!-- Added "group w-full" to make the whole row act as one hoverable button -->
-            <button onclick="toggleSidebar()" class="group w-full flex items-center justify-start text-gray-400 hover:text-white rounded transition-colors focus:outline-none">
-                
-                <!-- Icon gets highlighted when group is hovered -->
-                <div class="h-10 w-10 flex items-center justify-center group-hover:bg-gray-800 rounded transition-colors flex-shrink-0">
-                    <svg id="toggleIcon" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path id="togglePath" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2zM9 6v12" />
-                    </svg>
-                </div>
-                
-                <!-- Text also gets highlighted when group is hovered -->
-                <span id="toggleText" class="ml-3 text-sm font-medium sidebar-text whitespace-nowrap text-gray-400 group-hover:text-white transition-colors">Collapse sidebar</span>
+        <div class="border-t border-cf-dark p-2 flex items-center justify-start">
+            <!-- FIXED: Button is now a relative group, tooltip is inside it. Removed permanent text. -->
+            <button onclick="toggleSidebar()" class="group relative h-10 w-10 flex items-center justify-center text-gray-400 hover:text-white hover:bg-gray-800 rounded transition-colors focus:outline-none flex-shrink-0 ml-2">
+                <svg id="toggleIcon" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path id="togglePath" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2zM9 6v12" />
+                </svg>
+                <!-- Tooltip pops up dynamically based on state -->
+                <span id="tooltipText" class="tooltip">Collapse sidebar ⌘B</span>
             </button>
-            
-            <!-- Tooltip remains exactly the same for when it's closed -->
-            <span id="tooltipText" class="tooltip">Expand sidebar ⌘B</span>
         </div>
     </aside>
 
@@ -131,16 +125,10 @@
         
         <!-- Minimalist Top Header Bar -->
         <header id="top-header" class="h-16 flex items-center justify-between px-6 z-30 flex-shrink-0">
-            
-            <!-- Left: Empty (to maintain flexbox centering balance) -->
             <div class="w-1/3"></div>
-
-            <!-- Center: Brand Name -->
             <div class="flex items-center justify-center w-1/3">
                 <span class="text-xl md:text-2xl font-semibold tracking-widest uppercase text-center whitespace-nowrap">Shaheen Kapda Ghar</span>
             </div>
-            
-            <!-- Right: Contact -->
             <div class="flex items-center justify-end w-1/3">
                 <a href="mailto:shahinkapdaghar@gmail.com" class="text-xs uppercase tracking-widest hover:underline font-semibold text-gray-600 hover:text-black transition">Contact us</a>
             </div>
@@ -153,7 +141,6 @@
                     <h1 id="categoryTitle" class="text-3xl font-light text-gray-800 tracking-wide">Overview</h1>
                 </div>
 
-                <!-- Search Bar remains untouched as requested -->
                 <div class="max-w-5xl mx-auto bg-white rounded-lg border border-gray-200 shadow-sm p-2 mb-8 flex items-center focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500 transition-all">
                     <svg class="h-5 w-5 text-gray-400 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -161,16 +148,12 @@
                     <input type="text" placeholder="Search catalog..." class="w-full ml-3 outline-none text-sm text-gray-600" onkeyup="searchProducts(this.value)">
                 </div>
 
-                <!-- FIXED: Removed bg-white, border, and shadow from the grid container -->
                 <div class="max-w-5xl mx-auto mb-8">
-                    
-                    <!-- FIXED: Removed the gray background and border from the header row so it blends -->
                     <div class="py-4 flex justify-between items-center mb-2">
                         <h2 class="font-medium text-gray-800">Product List</h2>
                         <span id="productCount" class="text-xs font-medium bg-white border border-gray-200 text-gray-700 px-3 py-1 rounded-full shadow-sm">0 items</span>
                     </div>
                     
-                    <!-- The grid itself stays the same -->
                     <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         <p class="text-gray-400 text-sm col-span-full">Loading catalog...</p>
                     </div>
@@ -231,16 +214,13 @@
             const sidebar = document.getElementById('sidebar');
             const isCollapsed = sidebar.classList.toggle('sidebar-collapsed');
             const path = document.getElementById('togglePath');
-            const toggleText = document.getElementById('toggleText');
             const tooltipText = document.getElementById('tooltipText');
 
             if (isCollapsed) {
                 path.setAttribute('d', 'M4 6h16a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2zM15 6v12');
-                toggleText.innerText = "Expand sidebar";
                 tooltipText.innerText = "Expand sidebar ⌘B";
             } else {
                 path.setAttribute('d', 'M4 6h16a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2zM9 6v12');
-                toggleText.innerText = "Collapse sidebar";
                 tooltipText.innerText = "Collapse sidebar ⌘B";
             }
         }
@@ -406,6 +386,7 @@
                 const sidebar = document.getElementById('sidebar');
                 sidebar.classList.add('sidebar-collapsed');
                 document.getElementById('togglePath').setAttribute('d', 'M4 6h16a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2zM15 6v12');
+                document.getElementById('tooltipText').innerText = "Expand sidebar ⌘B";
             }
         }
 
@@ -456,6 +437,7 @@
                     const sidebar = document.getElementById('sidebar');
                     sidebar.classList.add('sidebar-collapsed');
                     document.getElementById('togglePath').setAttribute('d', 'M4 6h16a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2zM15 6v12');
+                    document.getElementById('tooltipText').innerText = "Expand sidebar ⌘B";
                 }
             } catch (error) {
                 console.error("Fetch Error:", error);
