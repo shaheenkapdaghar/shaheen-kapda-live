@@ -1,1 +1,14 @@
-[]
+[
+    {
+        "id": "f9a27623",
+        "name": "Print",
+        "price": "100",
+        "fabric": "Ryon",
+        "category": "Print",
+        "colors": [
+            "Multi-Colour"
+        ],
+        "image_url": "https://i.ibb.co/6cNcdZvh/21afab892a69.jpg",
+        "video_url": "https://youtube.com/shorts/p2EwdOLm--4?feature=share"
+    }
+]
