@@ -16,7 +16,6 @@
         /* Exact Cloudflare Transition Logic */
         #sidebar {
             width: 16rem; /* 256px open */
-            /* Matching Cloudflare's exact timing curve from inspector */
             transition: width 300ms cubic-bezier(0.4, 0, 0.2, 1);
         }
         #sidebar.sidebar-collapsed {
@@ -27,12 +26,11 @@
         .sidebar-text {
             transition: opacity 200ms ease-in-out;
             opacity: 1;
-            white-space: nowrap; /* Prevents wrapping/cramping */
+            white-space: nowrap; 
         }
         #sidebar.sidebar-collapsed .sidebar-text {
             opacity: 0;
             pointer-events: none;
-            /* Absolute positioning prevents text from squishing the logo while fading out */
             position: absolute; 
             visibility: hidden;
         }
@@ -40,21 +38,58 @@
         /* Pitch Black Colors */
         .bg-cf-black { background-color: #000000; }
         .border-cf-dark { border-color: #333333; }
+
+        /* Tooltip Styling */
+        .tooltip {
+            visibility: hidden;
+            background-color: white;
+            color: black;
+            text-align: center;
+            border-radius: 6px;
+            padding: 4px 10px;
+            position: absolute;
+            z-index: 50;
+            left: 110%; /* Place it to the right of the button */
+            opacity: 0;
+            transition: opacity 0.2s;
+            font-size: 0.85rem;
+            font-weight: 500;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border: 1px solid #e5e7eb;
+            white-space: nowrap;
+            pointer-events: none; /* Prevents the tooltip from blocking clicks */
+        }
+        
+        /* Show tooltip on hover only when sidebar is collapsed */
+        #sidebar.sidebar-collapsed .toggle-container:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Tooltip arrow */
+        .tooltip::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            right: 100%;
+            margin-top: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: transparent white transparent transparent;
+        }
     </style>
 </head>
 <body class="text-gray-800 flex h-screen overflow-hidden">
 
-    <!-- Left Persistent Sidebar -->
+    <!-- Left Persistent Sidebar (PITCH BLACK) -->
     <aside id="sidebar" class="bg-cf-black border-r border-cf-dark flex flex-col z-20 flex-shrink-0 text-white relative">
         
         <!-- Top Logo Area -->
-        <!-- We use w-full and relative to give the text room to breathe -->
+        <!-- Fixed padding to ensure logo never squishes -->
         <div class="h-16 flex items-center px-4 border-b border-cf-dark w-full overflow-hidden relative">
-            <!-- Logo stays fixed left -->
-            <div class="h-8 w-8 rounded flex items-center justify-center bg-black flex-shrink-0 z-10 relative">
+            <div class="h-8 w-8 rounded flex items-center justify-center bg-black flex-shrink-0 z-10">
                  <img src="https://i.ibb.co/DftDQgGM/IMG-6937.jpg" alt="Logo" class="h-full w-full object-cover rounded">
             </div>
-            <!-- Text sits next to it, absolute when collapsed to prevent layout shift -->
             <span class="ml-3 font-semibold text-sm sidebar-text">Shaheen Kapda Ghar</span>
         </div>
         
@@ -66,14 +101,18 @@
             </ul>
         </nav>
 
-        <!-- Bottom Toggle Button (Cloudflare Exact Icon) -->
-        <div class="border-t border-cf-dark flex items-center justify-center p-2">
-            <button onclick="toggleSidebar()" class="w-full flex items-center justify-center h-10 text-gray-400 hover:text-white hover:bg-gray-800 rounded transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <!-- Cloudflare's specific UI Sidebar Toggle Icon -->
-                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        <!-- Bottom Toggle Button (Exact Cloudflare Logic) -->
+        <div class="border-t border-cf-dark p-2 flex items-center justify-start relative toggle-container">
+            <button onclick="toggleSidebar()" class="h-10 w-10 flex items-center justify-center text-gray-400 hover:text-white hover:bg-gray-800 rounded transition-colors focus:outline-none flex-shrink-0">
+                <!-- Cloudflare Split-Pane SVG -->
+                <svg id="toggleIcon" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <!-- Default state (Sidebar Open): Line on the left -->
+                    <path id="togglePath" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2zM9 6v12" />
                 </svg>
             </button>
+            <span id="toggleText" class="ml-3 text-sm font-medium sidebar-text whitespace-nowrap text-gray-400">Collapse sidebar</span>
+            <!-- Hover Tooltip (Only visible when collapsed) -->
+            <span id="tooltipText" class="tooltip">Expand sidebar ⌘B</span>
         </div>
     </aside>
 
@@ -135,10 +174,27 @@
         let allProducts = []; 
         let currentCategory = 'All';
 
-        // Sidebar Toggle Logic
+        // Exact Cloudflare Sidebar Toggle Logic
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('sidebar-collapsed');
+            const isCollapsed = sidebar.classList.toggle('sidebar-collapsed');
+            
+            // Swap the SVG Path and text based on state
+            const path = document.getElementById('togglePath');
+            const toggleText = document.getElementById('toggleText');
+            const tooltipText = document.getElementById('tooltipText');
+
+            if (isCollapsed) {
+                // Sidebar is closed: Line on the right side
+                path.setAttribute('d', 'M4 6h16a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2zM15 6v12');
+                toggleText.innerText = "Expand sidebar";
+                tooltipText.innerText = "Expand sidebar ⌘B";
+            } else {
+                // Sidebar is open: Line on the left side
+                path.setAttribute('d', 'M4 6h16a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2zM9 6v12');
+                toggleText.innerText = "Collapse sidebar";
+                tooltipText.innerText = "Collapse sidebar ⌘B"; // Technically CF doesn't show tooltip when open, but logic supports it
+            }
         }
 
         function getInitials(name) {
@@ -226,7 +282,7 @@
             renderProducts(filtered);
             
             if (window.innerWidth < 768) {
-                document.getElementById('sidebar').classList.add('sidebar-collapsed');
+                toggleSidebar(); // Uses new toggle function
             }
         }
 
@@ -275,7 +331,10 @@
                 renderProducts(allProducts);
                 
                 if (window.innerWidth < 768) {
-                    document.getElementById('sidebar').classList.add('sidebar-collapsed');
+                    const sidebar = document.getElementById('sidebar');
+                    sidebar.classList.add('sidebar-collapsed');
+                    // Ensure path matches collapsed state on mobile load
+                    document.getElementById('togglePath').setAttribute('d', 'M4 6h16a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2zM15 6v12');
                 }
             } catch (error) {
                 document.getElementById('product-grid').innerHTML = '<p class="text-red-500 text-sm p-4">Error loading catalog.</p>';
