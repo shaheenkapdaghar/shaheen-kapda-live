@@ -388,7 +388,8 @@
             }
 
             products.forEach(product => {
-                const message = encodeURIComponent(`Hi Shaheen Kapda Ghar, I'm interested in the ${product.name} (Fabric: ${product.fabric}). Can you share more details?`);
+                // FIXED: Added product category to the WhatsApp message text
+const message = encodeURIComponent(`Hi Shaheen Kapda Ghar shop owner, I'm interested in the ${product.name} (Fabric: ${product.fabric}, Category: ${product.category || 'General'}). Can you share more details?`);
                 const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
                 const catDisplay = product.category ? product.category : 'General';
                 const vidArg = product.video_url ? `'${product.video_url}'` : "''";
