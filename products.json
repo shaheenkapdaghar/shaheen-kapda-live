@@ -3,6 +3,7 @@
         "id": "f9a27623",
         "name": "Print - Oct26001",
         "price": "100",
+        "price_unit": "/ metre",
         "fabric": "Ryon",
         "category": "Print",
         "colors": [
@@ -15,6 +16,7 @@
         "id": "a85ee823",
         "name": "Print - Oct26002",
         "price": "100",
+        "price_unit": "/ metre",
         "fabric": "Ryon",
         "category": "Print",
         "colors": [
@@ -27,6 +29,7 @@
         "id": "bc775417",
         "name": "Print - Oct26003",
         "price": "100",
+        "price_unit": "/ metre",
         "fabric": "Ryon",
         "category": "Print",
         "colors": [
@@ -39,6 +42,7 @@
         "id": "77449565",
         "name": "Print - Oct26004",
         "price": "100",
+        "price_unit": "/ metre",
         "fabric": "Ryon",
         "category": "Print",
         "colors": [
@@ -51,6 +55,7 @@
         "id": "b8ce3399",
         "name": "Print - Oct26005",
         "price": "100",
+        "price_unit": "/ metre",
         "fabric": "Ryon",
         "category": "Print",
         "colors": [
@@ -63,6 +68,7 @@
         "id": "f520d009",
         "name": "Collection - Oct26001",
         "price": "100",
+        "price_unit": "/ metre",
         "fabric": "Ryon",
         "category": "Print",
         "colors": [
