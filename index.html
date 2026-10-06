@@ -388,8 +388,7 @@
             }
 
             products.forEach(product => {
-                // FIXED: Added product category to the WhatsApp message text
-const message = encodeURIComponent(`Hi Shaheen Kapda Ghar shop owner, I'm interested in the ${product.name} (Fabric: ${product.fabric}, Category: ${product.category || 'General'}). Can you share more details?`);
+                const message = encodeURIComponent(`Hi Shaheen Kapda Ghar, I'm interested in the ${product.name} (Fabric: ${product.fabric}). Can you share more details?`);
                 const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
                 const catDisplay = product.category ? product.category : 'General';
                 const vidArg = product.video_url ? `'${product.video_url}'` : "''";
@@ -417,7 +416,8 @@ const message = encodeURIComponent(`Hi Shaheen Kapda Ghar shop owner, I'm intere
                             <p class="text-[10px] md:text-xs text-gray-500 mb-2 md:mb-3">${product.fabric}</p>
                             
                             <div class="mt-auto pt-2 md:pt-3 border-t border-gray-100 flex items-center justify-between">
-                                <p class="text-xs md:text-sm font-bold text-gray-900">₹${product.price}</p>
+                                <!-- Displays the unit if it exists and isn't "Flat". e.g., ₹100 / metre -->
+<p class="text-xs md:text-sm font-bold text-gray-900">₹${product.price} <span class="font-normal text-gray-500 text-[10px]">${product.price_unit === 'Flat' || !product.price_unit ? '' : product.price_unit}</span></p>
                                 <a href="${waUrl}" target="_blank" class="text-[10px] md:text-xs font-medium text-white bg-blue-600 hover:bg-blue-700 px-2 md:px-3 py-1 md:py-1.5 rounded transition">
                                     WhatsApp
                                 </a>
