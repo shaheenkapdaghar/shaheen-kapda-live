@@ -108,6 +108,7 @@
     <aside id="sidebar" class="bg-cf-black border-r border-cf-dark flex flex-col z-50 flex-shrink-0 text-gray-800 fixed md:relative h-full top-0 left-0 sidebar-collapsed">
         <!-- FIXED: Changed px-4 to px-2.5 to perfectly fit the new, much larger logo -->
         <!-- FIXED: Added py-4 and adjusted padding so the logo breathes nicely within the header space -->
+        <!-- FIXED: Added py-4 and adjusted padding so the logo breathes nicely within the header space -->
         <div class="h-16 flex items-center justify-center md:justify-start px-3 md:px-5 w-full overflow-hidden relative">
             <!-- FIXED: Removed fixed width (w-11). Using flex-shrink-0 to prevent squishing, and w-auto on the img so it scales naturally -->
             <div class="flex items-center justify-center flex-shrink-0 z-10">
@@ -387,7 +388,8 @@
             }
 
             products.forEach(product => {
-                const message = encodeURIComponent(`Hi Shaheen Kapda Ghar, I'm interested in the ${product.name} (Fabric: ${product.fabric}). Can you share more details?`);
+                // FIXED: Added product category to the WhatsApp message text
+const message = encodeURIComponent(`Hi Shaheen Kapda Ghar shop owner, I'm interested in the ${product.name} (Fabric: ${product.fabric}, Category: ${product.category || 'General'}). Can you share more details?`);
                 const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
                 const catDisplay = product.category ? product.category : 'General';
                 const vidArg = product.video_url ? `'${product.video_url}'` : "''";
