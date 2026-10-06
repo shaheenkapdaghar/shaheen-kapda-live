@@ -13,9 +13,8 @@
         ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
         
-        /* FIXED: Reduced open width from 16rem to 13rem to save space */
         #sidebar {
-            width: 13rem; 
+            width: 16rem; 
             transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1), width 300ms cubic-bezier(0.4, 0, 0.2, 1);
         }
         
@@ -44,6 +43,7 @@
             visibility: hidden;
         }
         
+        /* FIXED: Sidebar now matches main body color. Border made transparent for seamless look */
         .bg-cf-black { background-color: #f3f4f6; }
         .border-cf-dark { border-color: transparent; }
 
@@ -104,15 +104,15 @@
 
     <div id="mobileOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden opacity-0 transition-opacity duration-300 md:hidden" onclick="toggleSidebar()"></div>
 
-    <!-- FIXED: Added "sidebar-collapsed" so it starts closed immediately on HTML load, preventing the flash bug -->
-    <aside id="sidebar" class="bg-cf-black border-r border-cf-dark flex flex-col z-50 flex-shrink-0 text-gray-800 fixed md:relative h-full top-0 left-0 sidebar-collapsed">
-        <!-- FIXED: Changed px-4 to px-2.5 to perfectly fit the new, much larger logo -->
-        <div class="h-16 flex items-center px-2.5 w-full overflow-hidden relative">
-            <!-- FIXED: Increased logo size to h-11 w-11 (was h-8 w-8) and set object-contain -->
-            <div class="h-11 w-11 rounded flex items-center justify-center flex-shrink-0 z-10">
-                 <img src="https://i.ibb.co/7xxhddyh/A.png" alt="Official Logo" class="h-full w-full object-contain rounded">
-            </div>
+    <!-- FIXED: changed text-white to text-gray-800 so text is readable on light gray -->
+    <aside id="sidebar" class="bg-cf-black border-r border-cf-dark flex flex-col z-50 flex-shrink-0 text-gray-800 fixed md:relative h-full top-0 left-0">
+        <div class="h-16 flex items-center px-4 w-full overflow-hidden relative">
+        <!-- FIXED: Updated logo to the new official image URL -->
+        <!-- FIXED: Removed the adjacent brand text entirely to save horizontal space -->
+        <div class="h-11 w-11 rounded flex items-center justify-center flex-shrink-0 z-10">
+             <img src="https://i.ibb.co/7xxhddyh/A.png" alt="Official Logo" class="h-full w-full object-cover rounded">
         </div>
+    </div>
         
         <nav class="flex-1 overflow-y-auto py-4 overflow-x-hidden">
             <p class="px-5 text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-3 sidebar-text">Categories</p>
@@ -120,12 +120,12 @@
         </nav>
 
         <div class="p-2 flex items-center justify-start">
-            <!-- FIXED: Changed default tooltip to "Expand" and default path to the expand icon -->
-            <button onclick="toggleSidebar()" class="group relative h-10 w-10 flex items-center justify-center text-gray-500 hover:text-gray-900 hover:bg-gray-200 rounded transition-colors focus:outline-none flex-shrink-0 ml-2.5">
+            <!-- FIXED: Changed hover to light theme (text-gray-600, hover:text-gray-900, hover:bg-gray-200) -->
+            <button onclick="toggleSidebar()" class="group relative h-10 w-10 flex items-center justify-center text-gray-500 hover:text-gray-900 hover:bg-gray-200 rounded transition-colors focus:outline-none flex-shrink-0 ml-2">
                 <svg id="toggleIcon" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path id="togglePath" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2zM15 6v12" />
+                    <path id="togglePath" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2zM9 6v12" />
                 </svg>
-                <span id="tooltipText" class="tooltip">Expand sidebar</span>
+                <span id="tooltipText" class="tooltip">Collapse sidebar</span>
             </button>
         </div>
     </aside>
@@ -135,7 +135,7 @@
         
         <header id="top-header" class="h-16 flex items-center justify-between px-4 sm:px-6 z-30 flex-shrink-0">
             <div class="flex-1 md:hidden flex justify-start">
-                <button onclick="toggleSidebar()" class="text-gray-500 hover:text-black transition-colors focus:outline-none">
+                <button onclick="toggleSidebar()" class="text-gray-500 hover:text-black">
                     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
@@ -185,6 +185,7 @@
                     </div>
                     
                     <div class="flex items-center space-x-6">
+                        
                         <a href="https://instagram.com/shaheenkapdaghar" target="_blank" class="hover:scale-110 transition-transform duration-300">
                             <span class="sr-only">Instagram</span>
                             <svg class="h-6 w-6" viewBox="0 0 24 24" aria-hidden="true">
@@ -454,6 +455,7 @@
         }
 
         function createSidebarItem(name) {
+            // FIXED: Changed text-gray-400 to text-gray-500 so they are readable, and updated hover states.
             const initials = getInitials(name);
             const colorClass = getColor(name);
             
@@ -484,7 +486,12 @@
 
                 renderProducts(allProducts);
                 
-                // FIXED: Removed the manual JS override that caused the screen flash.
+                if (window.innerWidth < 768) {
+                    const sidebar = document.getElementById('sidebar');
+                    sidebar.classList.add('sidebar-collapsed');
+                    document.getElementById('togglePath').setAttribute('d', 'M4 6h16a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2zM15 6v12');
+                    document.getElementById('tooltipText').innerText = "Expand sidebar";
+                }
             } catch (error) {
                 console.error("Fetch Error:", error);
                 document.getElementById('product-grid').innerHTML = '<p class="text-red-500 text-sm p-4">Error loading catalog.</p>';
