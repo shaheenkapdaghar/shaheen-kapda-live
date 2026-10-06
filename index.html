@@ -107,10 +107,11 @@
     <!-- FIXED: Added "sidebar-collapsed" so it starts closed immediately on HTML load, preventing the flash bug -->
     <aside id="sidebar" class="bg-cf-black border-r border-cf-dark flex flex-col z-50 flex-shrink-0 text-gray-800 fixed md:relative h-full top-0 left-0 sidebar-collapsed">
         <!-- FIXED: Changed px-4 to px-2.5 to perfectly fit the new, much larger logo -->
-        <div class="h-16 flex items-center px-2.5 w-full overflow-hidden relative">
-            <!-- FIXED: Increased logo size to h-11 w-11 (was h-8 w-8) and set object-contain -->
-            <div class="h-11 w-11 rounded flex items-center justify-center flex-shrink-0 z-10">
-                 <img src="https://i.ibb.co/7xxhddyh/A.png" alt="Official Logo" class="h-full w-full object-contain rounded">
+        <!-- FIXED: Added py-4 and adjusted padding so the logo breathes nicely within the header space -->
+        <div class="h-16 flex items-center justify-center md:justify-start px-3 md:px-5 w-full overflow-hidden relative">
+            <!-- FIXED: Removed fixed width (w-11). Using flex-shrink-0 to prevent squishing, and w-auto on the img so it scales naturally -->
+            <div class="flex items-center justify-center flex-shrink-0 z-10">
+                 <img src="https://i.ibb.co/7xxhddyh/A.png" alt="Official Logo" class="h-10 md:h-12 w-auto object-contain">
             </div>
         </div>
         
