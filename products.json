@@ -76,5 +76,18 @@
         ],
         "image_url": "https://i.ibb.co/pvJy7v0t/ed368363692f.jpg",
         "video_url": ""
+    },
+    {
+        "id": "801aa77f",
+        "name": "Astar - Cutpiece Mai",
+        "price": "40",
+        "price_unit": "/ metre",
+        "fabric": "Cotton and Maslin",
+        "category": "Astar",
+        "colors": [
+            "All Colour Available"
+        ],
+        "image_url": "https://i.ibb.co/rG9qhrW3/92cb9633ca0e.png",
+        "video_url": "https://youtube.com/shorts/eQRRzE1ZVjM?feature=share"
     }
 ]
