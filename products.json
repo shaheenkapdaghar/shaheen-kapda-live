@@ -89,5 +89,18 @@
         ],
         "image_url": "https://i.ibb.co/rG9qhrW3/92cb9633ca0e.png",
         "video_url": "https://youtube.com/shorts/eQRRzE1ZVjM?feature=share"
+    },
+    {
+        "id": "3b92fb1c",
+        "name": "Namaz Ka Dupatta - Oct26",
+        "price": "100",
+        "price_unit": "Flat",
+        "fabric": "Cotton/Malmal",
+        "category": "Dupatta",
+        "colors": [
+            "Multi-Colour"
+        ],
+        "image_url": "https://i.ibb.co/qPLP1gm/cfb89a43d2b2.jpg",
+        "video_url": "https://youtube.com/shorts/PE1535I-oj8?feature=share"
     }
 ]
