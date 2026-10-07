@@ -398,8 +398,9 @@ const message = encodeURIComponent(`Hi Shaheen Kapda Ghar shop owner, I'm intere
 
                 const card = `
                     <div class="border border-gray-200 rounded-lg overflow-hidden bg-white hover:border-blue-400 transition-colors flex flex-col group shadow-sm">
-                        <div class="relative aspect-[3/4] bg-gray-100 cursor-pointer overflow-hidden" onclick="openMedia('${product.image_url}', ${vidArg}, event)">
-                            <img src="${product.image_url}" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/400x500?text=Image+Removed'">
+                        <!-- FIXED: Removed aspect-[3/4] and changed img to h-auto. This stops the browser from squishing/blurring local images -->
+                    <div class="relative bg-gray-100 cursor-pointer overflow-hidden flex items-center justify-center" onclick="openMedia('${product.image_url}', ${vidArg}, event)">
+                        <img src="${product.image_url}" alt="${product.name}" loading="lazy" class="w-full h-auto max-h-[300px] object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/400x500?text=Image+Removed'">
                             
                             ${product.video_url ? `
                             <div class="absolute top-2 right-2 bg-black bg-opacity-60 rounded-full p-1.5 z-10">
