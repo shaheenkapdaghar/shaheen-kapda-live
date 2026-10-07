@@ -70,10 +70,11 @@
             pointer-events: none; 
         }
         
-        .group:hover .tooltip {
-            visibility: visible;
-            opacity: 1;
-        }
+        /* FIXED: Only show tooltips when sidebar is explicitly collapsed to avoid double text */
+    #sidebar.sidebar-collapsed .group:hover .tooltip {
+        visibility: visible;
+        opacity: 1;
+    }
 
         .tooltip::after {
             content: "";
@@ -116,7 +117,8 @@
             </div>
         </div>
         
-        <nav class="flex-1 overflow-y-auto py-4 overflow-x-hidden">
+        <!-- FIXED: Removed overflow-x-hidden and overflow-y-auto so tooltips can break out of the sidebar box -->
+    <nav class="flex-1 py-4 overflow-visible">
             <p class="px-5 text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-3 sidebar-text">Categories</p>
             <ul id="categoryList" class="space-y-1"></ul>
         </nav>
@@ -471,8 +473,8 @@ const message = encodeURIComponent(`Hi Shaheen Kapda Ghar shop owner, I'm intere
                     </div>
                     <span class="ml-3 sidebar-text whitespace-nowrap">${displayName}</span>
                     
-                    <!-- NEW TOOLTIP ELEMENT -->
-                    <span class="tooltip hidden md:block">${displayName}</span>
+                    <!-- NEW TOOLTIP ELEMENT: Adjusted positioning for lists -->
+                <span class="tooltip hidden md:block absolute left-full ml-4 z-50">${displayName}</span>
                 </button>
             </li>`;
     }
