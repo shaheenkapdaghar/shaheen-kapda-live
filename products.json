@@ -284,5 +284,18 @@
         ],
         "image_url": "https://i.ibb.co/7tfkB4rq/33f9535da7c7.jpg",
         "video_url": "https://youtube.com/shorts/s2c4vK4b4r4?feature=share"
+    },
+    {
+        "id": "a9ecbfcd",
+        "name": "Collection - Oct26003",
+        "price": "100",
+        "price_unit": "/ metre",
+        "fabric": "Ryon",
+        "category": "Print",
+        "colors": [
+            "Multi-Colour"
+        ],
+        "image_url": "https://i.ibb.co/4n2xG1GD/a2098263bcfc.jpg",
+        "video_url": ""
     }
 ]
