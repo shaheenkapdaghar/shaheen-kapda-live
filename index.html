@@ -458,19 +458,24 @@ const message = encodeURIComponent(`Hi Shaheen Kapda Ghar shop owner, I'm intere
         }
 
         function createSidebarItem(name) {
-            const initials = getInitials(name);
-            const colorClass = getColor(name);
-            
-            return `
-                <li>
-                    <button onclick="filterCategory('${name}')" class="w-full flex items-center p-2 mt-1 text-sm text-gray-500 hover:bg-gray-200 hover:text-gray-900 transition rounded mx-2 cf-nav-item" style="width: calc(100% - 1rem);">
-                        <div class="h-6 w-6 rounded flex items-center justify-center font-bold text-[10px] ${colorClass} flex-shrink-0">
-                            ${initials}
-                        </div>
-                        <span class="ml-3 sidebar-text whitespace-nowrap">${name === 'All' ? 'All Products' : name}</span>
-                    </button>
-                </li>`;
-        }
+        const initials = getInitials(name);
+        const colorClass = getColor(name);
+        const displayName = name === 'All' ? 'All Products' : name;
+        
+        // FIXED: Added 'group relative' to the button, and injected the tooltip span
+        return `
+            <li>
+                <button onclick="filterCategory('${name}')" class="group relative w-full flex items-center p-2 mt-1 text-sm text-gray-500 hover:bg-gray-200 hover:text-gray-900 transition rounded mx-2 cf-nav-item focus:outline-none" style="width: calc(100% - 1rem);">
+                    <div class="h-6 w-6 rounded flex items-center justify-center font-bold text-[10px] ${colorClass} flex-shrink-0">
+                        ${initials}
+                    </div>
+                    <span class="ml-3 sidebar-text whitespace-nowrap">${displayName}</span>
+                    
+                    <!-- NEW TOOLTIP ELEMENT -->
+                    <span class="tooltip hidden md:block">${displayName}</span>
+                </button>
+            </li>`;
+    }
 
         async function init() {
             try {
