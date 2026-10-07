@@ -206,5 +206,18 @@
         ],
         "image_url": "https://i.ibb.co/n8zMXNhD/89677c3870d1.jpg",
         "video_url": ""
+    },
+    {
+        "id": "206f2fbe",
+        "name": "Print - Oct26012",
+        "price": "100",
+        "price_unit": "/ metre",
+        "fabric": "Ryon",
+        "category": "Print",
+        "colors": [
+            "Multi-Colour"
+        ],
+        "image_url": "https://i.ibb.co/fVRQyZQL/eed999b6c08b.jpg",
+        "video_url": "https://youtube.com/shorts/Xz3q6CXFays?feature=share"
     }
 ]
