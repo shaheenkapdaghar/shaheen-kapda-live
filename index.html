@@ -6,19 +6,22 @@
     <title>Shaheen Kapda Ghar</title>
     <meta name="description" content="Explore dress materials, fabrics and collections from Shaheen Kapda Ghar. Browse the catalogue and enquire on WhatsApp.">
     <meta name="theme-color" content="#f3f4f6">
+    <!-- The linked icons retain the transparency in the uploaded A.png artwork. -->
     <meta name="color-scheme" content="light">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="Shaheen Kapda Ghar">
     <link rel="manifest" href="./manifest.webmanifest">
-    <link rel="apple-touch-icon" sizes="180x180" href="./assets/skg-logo-180-v2.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="./assets/skg-official-transparent-48-v3.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="./assets/skg-official-transparent-192-v3.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./assets/skg-official-transparent-180-v3.png">
     <!-- Local CSS allows the app shell to be styled offline. The original CDN remains for visual compatibility online. -->
     <link rel="stylesheet" href="./styles.css">
     <script>if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) document.documentElement.classList.add('pwa-standalone');</script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Browser favicon remains the original official A.png URL. PWA installation icons are now generated from your uploaded SKG logo artwork. -->
-    <link rel="icon" type="image/png" href="https://i.ibb.co/7xxhddyh/A.png">
+    <!-- Exact official uploaded logo: local asset, no third-party image-host dependency. -->
+    <link rel="icon" type="image/png" href="./A.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
@@ -148,7 +151,7 @@
     <aside id="sidebar" class="bg-cf-black border-r border-cf-dark flex flex-col z-50 flex-shrink-0 text-gray-800 fixed md:relative h-full top-0 left-0 sidebar-collapsed">
         <div class="h-16 flex items-center justify-center md:justify-start px-3 md:px-5 w-full overflow-hidden relative">
             <div class="flex items-center justify-center flex-shrink-0 z-10">
-                 <img src="https://i.ibb.co/7xxhddyh/A.png" alt="Official Logo" class="h-10 md:h-12 w-auto object-contain">
+                 <img src="./A.png" alt="Official Logo" class="h-10 md:h-12 w-auto object-contain">
             </div>
         </div>
     <nav class="flex-1 py-4 overflow-visible">
@@ -188,7 +191,7 @@
         </header>
         <div id="offlineNotice" role="status" class="px-4 py-2 bg-amber-50 border-b border-amber-200 text-amber-900 text-xs text-center">You're offline. Saved catalogue items may still be available; videos and enquiries need internet.</div>
         <div id="installBanner" role="region" aria-label="Install Shaheen Kapda Ghar app" class="items-center gap-3 px-3 py-2 bg-white border border-gray-200 rounded-lg shadow-sm md:hidden">
-            <img src="./assets/skg-logo-192-v2.png" alt="" class="h-10 w-10 rounded-lg flex-shrink-0">
+            <img src="./assets/skg-official-transparent-192-v3.png" alt="" class="h-10 w-10 rounded-lg flex-shrink-0">
             <div class="flex-1 min-w-0"><p class="text-sm font-semibold text-gray-900">Shaheen Kapda Ghar app</p><p id="installHint" class="text-xs text-gray-600">Add our catalogue to your home screen.</p></div>
             <button id="installAppBtn" type="button" class="rounded bg-gray-900 text-white text-xs font-semibold px-3 py-2 flex-shrink-0">Install</button>
             <button id="dismissInstallBtn" type="button" aria-label="Dismiss installation suggestion" class="text-gray-500 text-xl px-1 flex-shrink-0">&times;</button>
