@@ -359,13 +359,49 @@
         setTimeout(() => modal.classList.add('hidden'), 300);
     }
 
-    function changeSlide(direction) {
-        if (mediaItems.length <= 1) return;
-        let next = currentSlide + direction;
-        if (next >= mediaItems.length) next = 0;
-        if (next < 0) next = mediaItems.length - 1;
-        goToSlide(next);
+    // --- NEW SWIPE GESTURE LOGIC ---
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    function handleSwipe() {
+        const swipeThreshold = 50; // Minimum distance (px) required to trigger a swipe
+        const distance = touchEndX - touchStartX;
+        
+        if (distance < -swipeThreshold) {
+            // Swiped Left -> Go to Next Slide
+            changeSlide(1);
+        }
+        if (distance > swipeThreshold) {
+            // Swiped Right -> Go to Previous Slide
+            changeSlide(-1);
+        }
     }
+
+    // Attach listeners to the modal container once DOM is loaded
+    document.addEventListener('DOMContentLoaded', () => {
+        const mediaContainer = document.querySelector('#mediaModal > div.relative');
+        
+        // Touch events (Smartphones/Tablets)
+        mediaContainer.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        mediaContainer.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, { passive: true });
+
+        // Mouse events (Laptops/Desktops)
+        mediaContainer.addEventListener('mousedown', e => {
+            touchStartX = e.screenX;
+        });
+
+        mediaContainer.addEventListener('mouseup', e => {
+            touchEndX = e.screenX;
+            handleSwipe();
+        });
+    });
+    // -------------------------------
 
     function goToSlide(index) {
         if (mediaItems.length === 0) return;
