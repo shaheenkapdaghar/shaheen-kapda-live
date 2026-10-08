@@ -4,6 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shaheen Kapda Ghar</title>
+    <meta name="description" content="Explore dress materials, fabrics and collections from Shaheen Kapda Ghar. Browse the catalogue and enquire on WhatsApp.">
+    <meta name="theme-color" content="#f3f4f6">
+    <meta name="color-scheme" content="light">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Shaheen Kapda Ghar">
+    <link rel="manifest" href="./manifest.webmanifest">
+    <link rel="apple-touch-icon" sizes="180x180" href="./assets/icon-180.png">
+    <!-- Local CSS allows the app shell to be styled offline. The original CDN remains for visual compatibility online. -->
+    <link rel="stylesheet" href="./styles.css">
+    <script>if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) document.documentElement.classList.add('pwa-standalone');</script>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FIXED: Added official favicon for browser tabs and pinned sites -->
     <link rel="icon" type="image/png" href="https://i.ibb.co/7xxhddyh/A.png">
@@ -95,6 +107,40 @@
         @media (any-pointer: coarse) {
             #videoSwipeCover:not(.hidden) { display: flex; }
         }
+
+        /* Mobile installed-app experience only. Ordinary web browser layout stays unchanged. */
+        #appBottomNav { display: none; }
+        #installBanner { display: none; }
+        #offlineNotice { display: none; }
+        #offlineNotice.is-offline { display: block; }
+        #installBanner.is-visible { display: flex; }
+        #installBanner[hidden], #offlineNotice[hidden] { display: none !important; }
+        #appBottomNav .app-nav-action { min-height: 48px; min-width: 56px; }
+        #appBottomNav .app-nav-action svg { width: 23px; height: 23px; }
+        #appBottomNav a, #appBottomNav button { -webkit-tap-highlight-color: transparent; }
+        @media (max-width: 767px) {
+            html.pwa-standalone body { height: 100vh; height: 100dvh; overflow: hidden; }
+            html.pwa-standalone #top-header {
+                height: calc(3.75rem + env(safe-area-inset-top, 0px));
+                padding-top: env(safe-area-inset-top, 0px);
+                background: #f3f4f6; border-bottom: 1px solid #e5e7eb;
+            }
+            html.pwa-standalone #appBottomNav {
+                display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+                position: fixed; left: 0; right: 0; bottom: 0; z-index: 35;
+                padding: 5px 6px calc(5px + env(safe-area-inset-bottom, 0px));
+                border-top: 1px solid #e5e7eb; background: rgba(255,255,255,.98);
+                box-shadow: 0 -2px 12px rgba(17,24,39,.06);
+            }
+            html.pwa-standalone main { padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px)); }
+            html.pwa-standalone #mediaModal > button:first-child { top: calc(1.5rem + env(safe-area-inset-top,0px)); }
+            html.pwa-standalone #mediaModal { padding-bottom: env(safe-area-inset-bottom, 0px); }
+            #installBanner { margin: 0 10px 8px; }
+            #top-header a[href^="mailto:"] { font-size: 10px; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            #sidebar, #mediaModal, .transition, .transition-all, .transition-opacity { transition-duration: 0.01ms !important; }
+        }
     </style>
 </head>
 <body class="text-gray-800 flex h-screen overflow-hidden">
@@ -134,9 +180,19 @@
                 <span class="text-[13px] min-[375px]:text-base sm:text-xl md:text-2xl font-semibold tracking-widest uppercase text-center whitespace-nowrap">Shaheen Kapda Ghar</span>
             </div>
             <div class="flex-1 flex items-center justify-end">
-                <a href="mailto:shahinkapdaghar@gmail.com" class="text-[10px] sm:text-xs uppercase tracking-widest hover:underline font-semibold text-gray-600 hover:text-black transition">Contact us</a>
+                <a href="mailto:shahinkapdaghar@gmail.com" aria-label="Contact Shaheen Kapda Ghar by email" class="text-[10px] sm:text-xs uppercase tracking-widest hover:underline font-semibold text-gray-600 hover:text-black transition inline-flex items-center justify-center min-w-8 min-h-10">
+                    <span class="hidden sm:inline">Contact us</span>
+                    <svg class="w-5 h-5 sm:hidden" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M3 6.5A1.5 1.5 0 0 1 4.5 5h15A1.5 1.5 0 0 1 21 6.5v11a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 17.5v-11Z"/><path stroke-linecap="round" stroke-linejoin="round" d="m4 7 8 6 8-6"/></svg>
+                </a>
             </div>
         </header>
+        <div id="offlineNotice" role="status" class="px-4 py-2 bg-amber-50 border-b border-amber-200 text-amber-900 text-xs text-center">You're offline. Saved catalogue items may still be available; videos and enquiries need internet.</div>
+        <div id="installBanner" role="region" aria-label="Install Shaheen Kapda Ghar app" class="items-center gap-3 px-3 py-2 bg-white border border-gray-200 rounded-lg shadow-sm md:hidden">
+            <img src="./assets/icon-192.png" alt="" class="h-10 w-10 rounded-lg flex-shrink-0">
+            <div class="flex-1 min-w-0"><p class="text-sm font-semibold text-gray-900">Shaheen Kapda Ghar app</p><p id="installHint" class="text-xs text-gray-600">Add our catalogue to your home screen.</p></div>
+            <button id="installAppBtn" type="button" class="rounded bg-gray-900 text-white text-xs font-semibold px-3 py-2 flex-shrink-0">Install</button>
+            <button id="dismissInstallBtn" type="button" aria-label="Dismiss installation suggestion" class="text-gray-500 text-xl px-1 flex-shrink-0">&times;</button>
+        </div>
         <main class="flex-1 overflow-y-auto flex flex-col">
             <div class="p-3 md:p-8 flex-1">
                 <div class="max-w-5xl mx-auto mb-4 md:mb-6">
@@ -146,7 +202,7 @@
                     <svg class="h-5 w-5 text-gray-400 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
-                    <input type="text" placeholder="Search catalog..." class="w-full ml-3 outline-none text-sm text-gray-600" onkeyup="searchProducts(this.value)">
+                    <input id="catalogSearch" type="search" aria-label="Search catalogue" placeholder="Search catalog..." class="w-full ml-3 outline-none text-sm text-gray-600" onkeyup="searchProducts(this.value)">
                 </div>
                 <div class="max-w-5xl mx-auto mb-8">
                     <div class="py-2 md:py-4 flex justify-between items-center mb-2">
@@ -190,6 +246,22 @@
             </footer>
         </main>
     </div>
+
+    <!-- Installed smartphone app navigation. Hidden in the normal website. -->
+    <nav id="appBottomNav" aria-label="App navigation">
+        <button type="button" class="app-nav-action flex flex-col items-center justify-center gap-0.5 text-gray-800" onclick="appGoHome()" aria-label="Home">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V10Z"/></svg><span class="text-[10px] font-medium">Home</span>
+        </button>
+        <button type="button" class="app-nav-action flex flex-col items-center justify-center gap-0.5 text-gray-600" onclick="appOpenCategories()" aria-label="Browse categories">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4 5h16M4 12h16M4 19h16"/></svg><span class="text-[10px] font-medium">Categories</span>
+        </button>
+        <button type="button" class="app-nav-action flex flex-col items-center justify-center gap-0.5 text-gray-600" onclick="appFocusSearch()" aria-label="Search products">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path stroke-linecap="round" d="m16 16 5 5"/></svg><span class="text-[10px] font-medium">Search</span>
+        </button>
+        <a class="app-nav-action flex flex-col items-center justify-center gap-0.5 text-gray-600" href="https://wa.me/919999950662?text=Hello%20Shaheen%20Kapda%20Ghar%2C%20I%20would%20like%20to%20enquire%20about%20your%20products." target="_blank" rel="noopener noreferrer" aria-label="Contact via WhatsApp">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M20 11.4a8.5 8.5 0 0 1-12.7 7.4L3 20l1.2-4.2A8.5 8.5 0 1 1 20 11.4Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M8.6 8.2c.6 3.2 2.3 4.9 5.7 6.1l1.8-1.3 1.2.8-.5 1.8c-4 2.1-9.1-2.9-9.2-6.9l1-1.1Z"/></svg><span class="text-[10px] font-medium">WhatsApp</span>
+        </a>
+    </nav>
 
     <!-- FULL SCREEN INSTAGRAM CAROUSEL MODAL -->
     <div id="mediaModal" class="fixed inset-0 bg-black bg-opacity-95 z-50 hidden flex flex-col justify-center items-center opacity-0 transition-opacity duration-300" onclick="closeMedia()">
@@ -583,9 +655,13 @@
 
     async function init() {
         try {
-            const response = await fetch('products.json?t=' + new Date().getTime());
-            allProducts = await response.json();
-            allProducts.reverse(); 
+            // Service worker uses network-first and saves the latest successful catalogue.
+            // The normal site also gets fresh updates whenever a network connection is available.
+            const response = await fetch('./products.json', { cache: 'no-store' });
+            if (!response.ok) throw new Error(`Catalogue HTTP ${response.status}`);
+            const catalogue = await response.json();
+            if (!Array.isArray(catalogue)) throw new Error('Unexpected catalogue data');
+            allProducts = catalogue.reverse(); 
             
             const catList = document.getElementById('categoryList');
             catList.innerHTML = createSidebarItem('All');
@@ -598,11 +674,96 @@
             renderProducts(allProducts);
         } catch (error) {
             console.error("Fetch Error:", error);
-            document.getElementById('product-grid').innerHTML = '<p class="text-red-500 text-sm p-4">Error loading catalog.</p>';
+            document.getElementById('product-grid').innerHTML = '<p class="text-red-500 text-sm p-4">Catalogue unavailable. Connect to the internet and reload to download the latest products.</p>';
         }
     }
 
     init();
+
+    // ---- Progressive Web App support, progressive enhancement only ----
+    function appGoHome() {
+        const search = document.getElementById('catalogSearch');
+        if (search) search.value = '';
+        filterCategory('All');
+        const main = document.querySelector('main');
+        if (main) main.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function appOpenCategories() {
+        const sidebar = document.getElementById('sidebar');
+        if (sidebar.classList.contains('sidebar-collapsed')) toggleSidebar();
+    }
+
+    function appFocusSearch() {
+        const sidebar = document.getElementById('sidebar');
+        if (!sidebar.classList.contains('sidebar-collapsed') && window.innerWidth < 768) toggleSidebar();
+        const field = document.getElementById('catalogSearch');
+        if (field) {
+            field.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            field.focus({ preventScroll: true });
+        }
+    }
+
+    function updateConnectivity() {
+        const notice = document.getElementById('offlineNotice');
+        if (notice) notice.classList.toggle('is-offline', !navigator.onLine);
+    }
+    window.addEventListener('online', updateConnectivity);
+    window.addEventListener('offline', updateConnectivity);
+    updateConnectivity();
+
+    if ('serviceWorker' in navigator && (location.protocol === 'https:' || ['localhost', '127.0.0.1'].includes(location.hostname))) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./service-worker.js').catch(error => {
+                console.warn('PWA service worker unavailable:', error);
+            });
+        });
+    }
+
+    let deferredInstallPrompt = null;
+    const installBanner = document.getElementById('installBanner');
+    const installButton = document.getElementById('installAppBtn');
+    const installHint = document.getElementById('installHint');
+    const isInstalled = () => window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+    const dismissedInstall = () => {
+        try { return sessionStorage.getItem('skg-install-dismissed') === 'yes'; }
+        catch (_) { return false; }
+    };
+    const isMobileScreen = () => window.matchMedia('(max-width: 767px)').matches;
+    function showInstallBanner() {
+        if (isMobileScreen() && !isInstalled() && !dismissedInstall()) installBanner.classList.add('is-visible');
+    }
+    function hideInstallBanner() { installBanner.classList.remove('is-visible'); }
+
+    window.addEventListener('beforeinstallprompt', event => {
+        event.preventDefault();
+        deferredInstallPrompt = event;
+        installButton.hidden = false;
+        installHint.textContent = 'Install for a full-screen, home-screen catalogue.';
+        showInstallBanner();
+    });
+
+    installButton.addEventListener('click', async () => {
+        if (!deferredInstallPrompt) return;
+        const promptEvent = deferredInstallPrompt;
+        deferredInstallPrompt = null;
+        hideInstallBanner();
+        await promptEvent.prompt();
+    });
+
+    document.getElementById('dismissInstallBtn').addEventListener('click', () => {
+        hideInstallBanner();
+        try { sessionStorage.setItem('skg-install-dismissed', 'yes'); } catch (_) { }
+    });
+
+    window.addEventListener('appinstalled', () => { deferredInstallPrompt = null; hideInstallBanner(); });
+
+    // iOS Safari does not fire beforeinstallprompt; provide its native steps instead.
+    if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !isInstalled()) {
+        installButton.hidden = true;
+        installHint.textContent = 'Open in Safari, tap Share, then Add to Home Screen.';
+        showInstallBanner();
+    }
     </script>
 </body>
 </html>
