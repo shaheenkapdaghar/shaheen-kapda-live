@@ -297,27 +297,5 @@
         ],
         "image_url": "https://i.ibb.co/4n2xG1GD/a2098263bcfc.jpg",
         "video_url": ""
-    },
-    {
-        "id": "54b3a291",
-        "name": "Namaz Ka Dupatta - Oct26 (Album)",
-        "price": "100",
-        "price_unit": "Flat",
-        "fabric": "Cotton/Malmal",
-        "category": "Dupatta",
-        "colors": [
-            "Multi-Colour"
-        ],
-        "image_urls": [
-            "./images/02625603865a4193b71ce4bbfc129a26.JPG",
-            "./images/64c93bc911e040fbba69cca1dfbad0bc.JPG",
-            "./images/dd9f996966584d8bbc3002446e9ed939.JPG",
-            "./images/6e9aa3713ccb4ca5b760a914af9ab925.JPG",
-            "./images/5bb1739465a64ab0a4f8cf75b77b5ffa.JPG",
-            "./images/5d9f5a369663445a9efc7340627a1e3d.JPG",
-            "./images/b6de9410ffeb44a394a1e1f3c94fe910.heic",
-            "./images/a46c35beb8a740a29de6db1cbaeb8644.heic"
-        ],
-        "video_url": ""
     }
 ]
