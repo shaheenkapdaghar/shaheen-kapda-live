@@ -12,12 +12,12 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="Shaheen Kapda Ghar">
     <link rel="manifest" href="./manifest.webmanifest">
-    <link rel="apple-touch-icon" sizes="180x180" href="./assets/icon-180.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./assets/skg-logo-180-v2.png">
     <!-- Local CSS allows the app shell to be styled offline. The original CDN remains for visual compatibility online. -->
     <link rel="stylesheet" href="./styles.css">
     <script>if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) document.documentElement.classList.add('pwa-standalone');</script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FIXED: Added official favicon for browser tabs and pinned sites -->
+    <!-- Browser favicon remains the original official A.png URL. PWA installation icons are now generated from your uploaded SKG logo artwork. -->
     <link rel="icon" type="image/png" href="https://i.ibb.co/7xxhddyh/A.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
@@ -188,7 +188,7 @@
         </header>
         <div id="offlineNotice" role="status" class="px-4 py-2 bg-amber-50 border-b border-amber-200 text-amber-900 text-xs text-center">You're offline. Saved catalogue items may still be available; videos and enquiries need internet.</div>
         <div id="installBanner" role="region" aria-label="Install Shaheen Kapda Ghar app" class="items-center gap-3 px-3 py-2 bg-white border border-gray-200 rounded-lg shadow-sm md:hidden">
-            <img src="./assets/icon-192.png" alt="" class="h-10 w-10 rounded-lg flex-shrink-0">
+            <img src="./assets/skg-logo-192-v2.png" alt="" class="h-10 w-10 rounded-lg flex-shrink-0">
             <div class="flex-1 min-w-0"><p class="text-sm font-semibold text-gray-900">Shaheen Kapda Ghar app</p><p id="installHint" class="text-xs text-gray-600">Add our catalogue to your home screen.</p></div>
             <button id="installAppBtn" type="button" class="rounded bg-gray-900 text-white text-xs font-semibold px-3 py-2 flex-shrink-0">Install</button>
             <button id="dismissInstallBtn" type="button" aria-label="Dismiss installation suggestion" class="text-gray-500 text-xl px-1 flex-shrink-0">&times;</button>
