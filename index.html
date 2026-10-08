@@ -251,222 +251,273 @@
     </div>
 
     <script>
-        const WHATSAPP_NUMBER = "919999950662"; 
-        let allProducts = []; 
-        let currentCategory = 'All';
-        let currentSlide = 0;
-        let hasVideo = false;
+    const WHATSAPP_NUMBER = "919999950662"; 
+    let allProducts = []; 
+    let currentCategory = 'All';
+    
+    // Carousel State variables
+    let mediaItems = []; // Array of objects: {type: 'image'|'video', url: string}
+    let currentSlide = 0;
 
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const isCollapsed = sidebar.classList.toggle('sidebar-collapsed');
-            const path = document.getElementById('togglePath');
-            const tooltipText = document.getElementById('tooltipText');
-            const overlay = document.getElementById('mobileOverlay');
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const isCollapsed = sidebar.classList.toggle('sidebar-collapsed');
+        const path = document.getElementById('togglePath');
+        const tooltipText = document.getElementById('tooltipText');
+        const overlay = document.getElementById('mobileOverlay');
 
-            if (isCollapsed) {
-                path.setAttribute('d', 'M4 6h16a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2zM15 6v12');
-                tooltipText.innerText = "Expand sidebar";
-                if (overlay) {
-                    overlay.classList.add('opacity-0');
-                    setTimeout(() => overlay.classList.add('hidden'), 300);
-                }
-            } else {
-                path.setAttribute('d', 'M4 6h16a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2zM9 6v12');
-                tooltipText.innerText = "Collapse sidebar";
-                if (overlay && window.innerWidth < 768) {
-                    overlay.classList.remove('hidden');
-                    setTimeout(() => overlay.classList.remove('opacity-0'), 10);
-                }
+        if (isCollapsed) {
+            path.setAttribute('d', 'M4 6h16a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2zM15 6v12');
+            tooltipText.innerText = "Expand sidebar";
+            if (overlay) {
+                overlay.classList.add('opacity-0');
+                setTimeout(() => overlay.classList.add('hidden'), 300);
+            }
+        } else {
+            path.setAttribute('d', 'M4 6h16a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2zM9 6v12');
+            tooltipText.innerText = "Collapse sidebar";
+            if (overlay && window.innerWidth < 768) {
+                overlay.classList.remove('hidden');
+                setTimeout(() => overlay.classList.remove('opacity-0'), 10);
             }
         }
+    }
 
-        function getInitials(name) { return name.split(' ').map(word => word.charAt(0).toUpperCase()).slice(0, 2).join(''); }
+    function getInitials(name) { return name.split(' ').map(word => word.charAt(0).toUpperCase()).slice(0, 2).join(''); }
 
-        function getColor(name) {
-            const colors = ['bg-red-100 text-red-600', 'bg-blue-100 text-blue-600', 'bg-green-100 text-green-600', 'bg-purple-100 text-purple-600', 'bg-yellow-100 text-yellow-700', 'bg-pink-100 text-pink-600', 'bg-indigo-100 text-indigo-600'];
-            let hash = 0;
-            for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
-            return colors[Math.abs(hash) % colors.length];
+    function getColor(name) {
+        const colors = ['bg-red-100 text-red-600', 'bg-blue-100 text-blue-600', 'bg-green-100 text-green-600', 'bg-purple-100 text-purple-600', 'bg-yellow-100 text-yellow-700', 'bg-pink-100 text-pink-600', 'bg-indigo-100 text-indigo-600'];
+        let hash = 0;
+        for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+        return colors[Math.abs(hash) % colors.length];
+    }
+
+    // --- NEW MODAL CAROUSEL LOGIC ---
+
+    function openMedia(productIndex, event) {
+        event.stopPropagation();
+        
+        const product = allProducts[productIndex];
+        mediaItems = []; // Reset media queue
+        
+        // Push all images into media queue
+        if (product.image_urls && product.image_urls.length > 0) {
+            product.image_urls.forEach(url => {
+                mediaItems.push({ type: 'image', url: url });
+            });
+        } else if (product.image_url) {
+            // Fallback for older data format
+            mediaItems.push({ type: 'image', url: product.image_url });
         }
 
-        function openMedia(imageUrl, videoUrl, event) {
-            event.stopPropagation();
+        // Push video into media queue
+        if (product.video_url && product.video_url.trim() !== "") {
+            let formattedVideoUrl = product.video_url;
+            const ytRegex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?|shorts)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i;
+            const match = product.video_url.match(ytRegex);
+            if (match && match[1]) {
+                formattedVideoUrl = `https://www.youtube.com/embed/${match[1]}?autoplay=0&rel=0`;
+            }
+            mediaItems.push({ type: 'video', url: formattedVideoUrl });
+        }
+
+        if (mediaItems.length === 0) return; // Failsafe
+
+        const modal = document.getElementById('mediaModal');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const navDotsContainer = document.getElementById('navDots');
+
+        // Generate Nav Dots dynamically
+        navDotsContainer.innerHTML = '';
+        if (mediaItems.length > 1) {
+            mediaItems.forEach((_, i) => {
+                const dot = document.createElement('div');
+                dot.className = `h-2 w-2 rounded-full transition-colors cursor-pointer ${i === 0 ? 'bg-white' : 'bg-gray-600'}`;
+                dot.onclick = (e) => { e.stopPropagation(); goToSlide(i); };
+                navDotsContainer.appendChild(dot);
+            });
+            navDotsContainer.classList.remove('hidden');
+            prevBtn.classList.remove('hidden');
+            nextBtn.classList.remove('hidden');
+        } else {
+            navDotsContainer.classList.add('hidden');
+            prevBtn.classList.add('hidden');
+            nextBtn.classList.add('hidden');
+        }
+
+        goToSlide(0);
+
+        modal.classList.remove('hidden');
+        setTimeout(() => modal.classList.remove('opacity-0'), 10);
+    }
+
+    function closeMedia() {
+        const modal = document.getElementById('mediaModal');
+        modal.classList.add('opacity-0');
+        document.getElementById('modalVid').src = ""; // Stop video playback
+        setTimeout(() => modal.classList.add('hidden'), 300);
+    }
+
+    function changeSlide(direction) {
+        if (mediaItems.length <= 1) return;
+        let next = currentSlide + direction;
+        if (next >= mediaItems.length) next = 0;
+        if (next < 0) next = mediaItems.length - 1;
+        goToSlide(next);
+    }
+
+    function goToSlide(index) {
+        if (mediaItems.length === 0) return;
+        currentSlide = index;
+        const item = mediaItems[currentSlide];
+
+        const slideImg = document.getElementById('slideImage');
+        const slideVid = document.getElementById('slideVideo');
+        const modalImg = document.getElementById('modalImg');
+        const modalVid = document.getElementById('modalVid');
+
+        // Handle UI presentation based on media type
+        if (item.type === 'image') {
+            modalImg.src = item.url;
+            slideImg.classList.replace('opacity-0', 'opacity-100');
+            slideImg.classList.remove('pointer-events-none');
             
-            document.getElementById('modalImg').src = imageUrl;
+            slideVid.classList.replace('opacity-100', 'opacity-0');
+            slideVid.classList.add('pointer-events-none');
+            modalVid.src = ""; // Pause any playing video when viewing an image
+        } else if (item.type === 'video') {
+            modalVid.src = item.url;
+            slideVid.classList.replace('opacity-0', 'opacity-100');
+            slideVid.classList.remove('pointer-events-none');
             
-            hasVideo = !!(videoUrl && videoUrl.trim() !== "");
-            const modal = document.getElementById('mediaModal');
-            const prevBtn = document.getElementById('prevBtn');
-            const nextBtn = document.getElementById('nextBtn');
-            const navDots = document.getElementById('navDots');
-            const modalVid = document.getElementById('modalVid');
+            slideImg.classList.replace('opacity-100', 'opacity-0');
+            slideImg.classList.add('pointer-events-none');
+        }
 
-            if (hasVideo) {
-                let videoId = "";
-                const ytRegex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?|shorts)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i;
-                const match = videoUrl.match(ytRegex);
-                if (match && match[1]) {
-                    videoId = match[1];
-                    modalVid.src = `https://www.youtube.com/embed/${videoId}?autoplay=0&rel=0`;
-                } else {
-                    modalVid.src = videoUrl;
-                }
-                
-                prevBtn.classList.remove('hidden');
-                nextBtn.classList.remove('hidden');
-                navDots.classList.remove('hidden');
+        // Update Dots
+        const navDotsContainer = document.getElementById('navDots');
+        Array.from(navDotsContainer.children).forEach((dot, i) => {
+            if (i === currentSlide) {
+                dot.classList.replace('bg-gray-600', 'bg-white');
             } else {
-                modalVid.src = "";
-                prevBtn.classList.add('hidden');
-                nextBtn.classList.add('hidden');
-                navDots.classList.add('hidden');
-            }
-
-            goToSlide(0);
-
-            modal.classList.remove('hidden');
-            setTimeout(() => modal.classList.remove('opacity-0'), 10);
-        }
-
-        function closeMedia() {
-            const modal = document.getElementById('mediaModal');
-            modal.classList.add('opacity-0');
-            document.getElementById('modalVid').src = "";
-            setTimeout(() => modal.classList.add('hidden'), 300);
-        }
-
-        function changeSlide(direction) {
-            if (!hasVideo) return;
-            let next = currentSlide + direction;
-            if (next > 1) next = 0;
-            if (next < 0) next = 1;
-            goToSlide(next);
-        }
-
-        function goToSlide(index) {
-            if (!hasVideo && index === 1) return;
-            currentSlide = index;
-
-            const slideImg = document.getElementById('slideImage');
-            const slideVid = document.getElementById('slideVideo');
-            const dot0 = document.getElementById('dot0');
-            const dot1 = document.getElementById('dot1');
-
-            if (currentSlide === 0) {
-                slideImg.classList.replace('opacity-0', 'opacity-100');
-                slideImg.classList.remove('pointer-events-none');
-                slideVid.classList.replace('opacity-100', 'opacity-0');
-                slideVid.classList.add('pointer-events-none');
-                dot0.classList.replace('bg-gray-600', 'bg-white');
-                dot1.classList.replace('bg-white', 'bg-gray-600');
-            } else {
-                slideImg.classList.replace('opacity-100', 'opacity-0');
-                slideImg.classList.add('pointer-events-none');
-                slideVid.classList.replace('opacity-0', 'opacity-100');
-                slideVid.classList.remove('pointer-events-none');
-                dot0.classList.replace('bg-white', 'bg-gray-600');
-                dot1.classList.replace('bg-gray-600', 'bg-white');
-            }
-        }
-
-        document.addEventListener('keydown', function(event) {
-            const modal = document.getElementById('mediaModal');
-            if (!modal.classList.contains('hidden')) {
-                if (event.key === 'ArrowRight') changeSlide(1);
-                if (event.key === 'ArrowLeft') changeSlide(-1);
-                if (event.key === 'Escape') closeMedia();
+                dot.classList.replace('bg-white', 'bg-gray-600');
             }
         });
+    }
 
-        function renderProducts(products) {
-            const grid = document.getElementById('product-grid');
-            document.getElementById('productCount').innerText = `${products.length} items`;
-            grid.innerHTML = ''; 
+    document.addEventListener('keydown', function(event) {
+        const modal = document.getElementById('mediaModal');
+        if (!modal.classList.contains('hidden')) {
+            if (event.key === 'ArrowRight') changeSlide(1);
+            if (event.key === 'ArrowLeft') changeSlide(-1);
+            if (event.key === 'Escape') closeMedia();
+        }
+    });
+
+    function renderProducts(products) {
+        const grid = document.getElementById('product-grid');
+        document.getElementById('productCount').innerText = `${products.length} items`;
+        grid.innerHTML = ''; 
+        
+        if (products.length === 0) {
+            grid.innerHTML = '<p class="text-gray-500 text-sm col-span-full py-4">No products found.</p>';
+            return;
+        }
+
+        products.forEach(product => {
+            const message = encodeURIComponent(`Hi Shaheen Kapda Ghar shop owner, I'm interested in the ${product.name} (Fabric: ${product.fabric}, Category: ${product.category || 'General'}). Can you share more details?`);
+            const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
+            const catDisplay = product.category ? product.category : 'General';
             
-            if (products.length === 0) {
-                grid.innerHTML = '<p class="text-gray-500 text-sm col-span-full py-4">No products found.</p>';
-                return;
+            // Determine the thumbnail cover image (First image in array, fallback to old format, fallback to placeholder)
+            let coverImg = 'https://placehold.co/400x500?text=Video+Only';
+            if (product.image_urls && product.image_urls.length > 0) {
+                coverImg = product.image_urls[0];
+            } else if (product.image_url) {
+                coverImg = product.image_url; // legacy fallback
             }
 
-            products.forEach(product => {
-                // FIXED: Added product category to the WhatsApp message text
-const message = encodeURIComponent(`Hi Shaheen Kapda Ghar shop owner, I'm interested in the ${product.name} (Fabric: ${product.fabric}, Category: ${product.category || 'General'}). Can you share more details?`);
-                const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
-                const catDisplay = product.category ? product.category : 'General';
-                const vidArg = product.video_url ? `'${product.video_url}'` : "''";
+            // Check media counts for badge displays
+            const imageCount = product.image_urls ? product.image_urls.length : (product.image_url ? 1 : 0);
+            const hasVideo = !!product.video_url;
+            const totalMedia = imageCount + (hasVideo ? 1 : 0);
+            const originalIndex = allProducts.findIndex(p => p.id === product.id);
 
-                const card = `
-                    <div class="border border-gray-200 rounded-lg overflow-hidden bg-white hover:border-blue-400 transition-colors flex flex-col group shadow-sm">
-                        <!-- FIXED: Removed aspect-[3/4] and changed img to h-auto. This stops the browser from squishing/blurring local images -->
-                    <!-- FIXED: Restored aspect-[3/4] for uniform layout. High-res local images will fill this beautifully via object-cover. -->
-                    <div class="relative aspect-[3/4] bg-gray-100 cursor-pointer overflow-hidden" onclick="openMedia('${product.image_url}', ${vidArg}, event)">
-                        <img src="${product.image_url}" alt="${product.name}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/400x500?text=Image+Removed'">
-                            
-                            ${product.video_url ? `
-                            <div class="absolute top-2 right-2 bg-black bg-opacity-60 rounded-full p-1.5 z-10">
-                                <svg class="h-4 w-4 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z" /></svg>
-                            </div>` : ''}
-
-                            <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all flex items-center justify-center">
-                                <span class="bg-white text-black text-[10px] md:text-xs font-semibold px-2 md:px-3 py-1 rounded-full opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all">Click to Expand</span>
-                            </div>
-                        </div>
+            const card = `
+                <div class="border border-gray-200 rounded-lg overflow-hidden bg-white hover:border-blue-400 transition-colors flex flex-col group shadow-sm">
+                    <div class="relative aspect-[3/4] bg-gray-100 cursor-pointer overflow-hidden flex items-center justify-center" onclick="openMedia(${originalIndex}, event)">
+                        <img src="${coverImg}" alt="${product.name}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/400x500?text=No+Image'">
                         
-                        <div class="p-3 md:p-4 flex flex-col flex-1">
-                            <div class="flex justify-between items-start mb-1">
-                                <h3 class="text-xs md:text-sm font-semibold text-gray-900 truncate pr-1">${product.name}</h3>
-                                <span class="text-[9px] md:text-[10px] font-semibold ${getColor(catDisplay)} px-1.5 py-0.5 rounded whitespace-nowrap">${catDisplay}</span>
-                            </div>
-                            <p class="text-[10px] md:text-xs text-gray-500 mb-2 md:mb-3">${product.fabric}</p>
-                            
-                            <div class="mt-auto pt-2 md:pt-3 border-t border-gray-100 flex items-center justify-between">
-                                <!-- Displays the unit if it exists and isn't "Flat". e.g., ₹100 / metre -->
-<p class="text-xs md:text-sm font-bold text-gray-900">₹${product.price} <span class="font-normal text-gray-500 text-[10px]">${product.price_unit === 'Flat' || !product.price_unit ? '' : product.price_unit}</span></p>
-                                <a href="${waUrl}" target="_blank" class="text-[10px] md:text-xs font-medium text-white bg-blue-600 hover:bg-blue-700 px-2 md:px-3 py-1 md:py-1.5 rounded transition">
-                                    WhatsApp
-                                </a>
-                            </div>
+                        <!-- Badges Top Right: Video or Multiple Images Indicator -->
+                        <div class="absolute top-2 right-2 flex space-x-1 z-10">
+                            ${hasVideo ? `
+                            <div class="bg-black bg-opacity-60 rounded-full p-1.5 shadow">
+                                <svg class="h-3.5 w-3.5 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z" /></svg>
+                            </div>` : ''}
+                            ${totalMedia > 1 ? `
+                            <div class="bg-black bg-opacity-60 rounded-full px-2 py-1 shadow flex items-center justify-center">
+                                <span class="text-white text-[9px] font-bold">1/${totalMedia}</span>
+                            </div>` : ''}
+                        </div>
+
+                        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all flex items-center justify-center">
+                            <span class="bg-white text-black text-[10px] md:text-xs font-semibold px-2 md:px-3 py-1 rounded-full opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all">Click to Expand</span>
                         </div>
                     </div>
-                `;
-                grid.innerHTML += card;
-            });
-        }
+                    
+                    <div class="p-3 md:p-4 flex flex-col flex-1">
+                        <div class="flex justify-between items-start mb-1">
+                            <h3 class="text-xs md:text-sm font-semibold text-gray-900 truncate pr-1">${product.name}</h3>
+                            <span class="text-[9px] md:text-[10px] font-semibold ${getColor(catDisplay)} px-1.5 py-0.5 rounded whitespace-nowrap">${catDisplay}</span>
+                        </div>
+                        <p class="text-[10px] md:text-xs text-gray-500 mb-2 md:mb-3">${product.fabric}</p>
+                        
+                        <div class="mt-auto pt-2 md:pt-3 border-t border-gray-100 flex items-center justify-between">
+                            <p class="text-xs md:text-sm font-bold text-gray-900">₹${product.price} <span class="font-normal text-gray-500 text-[10px]">${product.price_unit === 'Flat' || !product.price_unit ? '' : product.price_unit}</span></p>
+                            <a href="${waUrl}" target="_blank" class="text-[10px] md:text-xs font-medium text-white bg-blue-600 hover:bg-blue-700 px-2 md:px-3 py-1 md:py-1.5 rounded transition" onclick="event.stopPropagation();">
+                                WhatsApp
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `;
+            grid.innerHTML += card;
+        });
+    }
 
-        function filterCategory(category) {
-            currentCategory = category;
-            document.getElementById('categoryTitle').innerText = category === 'All' ? 'Overview' : category;
-            
-            const filtered = category === 'All' ? allProducts : allProducts.filter(p => p.category === category);
-            renderProducts(filtered);
-            
-            if (window.innerWidth < 768) {
-                const sidebar = document.getElementById('sidebar');
-                if (!sidebar.classList.contains('sidebar-collapsed')) {
-                    toggleSidebar();
-                }
+    function filterCategory(category) {
+        currentCategory = category;
+        document.getElementById('categoryTitle').innerText = category === 'All' ? 'Overview' : category;
+        
+        const filtered = category === 'All' ? allProducts : allProducts.filter(p => p.category === category);
+        renderProducts(filtered);
+        
+        if (window.innerWidth < 768) {
+            const sidebar = document.getElementById('sidebar');
+            if (!sidebar.classList.contains('sidebar-collapsed')) {
+                toggleSidebar();
             }
         }
+    }
 
-        function searchProducts(query) {
-            const lowerQuery = query.toLowerCase();
-            let baseList = currentCategory === 'All' ? allProducts : allProducts.filter(p => p.category === currentCategory);
-            
-            const searched = baseList.filter(p => 
-                p.name.toLowerCase().includes(lowerQuery) || 
-                p.fabric.toLowerCase().includes(lowerQuery) ||
-                p.colors.some(c => c.toLowerCase().includes(lowerQuery))
-            );
-            renderProducts(searched);
-        }
+    function searchProducts(query) {
+        const lowerQuery = query.toLowerCase();
+        let baseList = currentCategory === 'All' ? allProducts : allProducts.filter(p => p.category === currentCategory);
+        
+        const searched = baseList.filter(p => 
+            p.name.toLowerCase().includes(lowerQuery) || 
+            p.fabric.toLowerCase().includes(lowerQuery) ||
+            p.colors.some(c => c.toLowerCase().includes(lowerQuery))
+        );
+        renderProducts(searched);
+    }
 
-        function createSidebarItem(name) {
+    function createSidebarItem(name) {
         const initials = getInitials(name);
         const colorClass = getColor(name);
         const displayName = name === 'All' ? 'All Products' : name;
         
-        // FIXED: Added 'group relative' to the button, and injected the tooltip span
         return `
             <li>
                 <button onclick="filterCategory('${name}')" class="group relative w-full flex items-center p-2 mt-1 text-sm text-gray-500 hover:bg-gray-200 hover:text-gray-900 transition rounded mx-2 cf-nav-item focus:outline-none" style="width: calc(100% - 1rem);">
@@ -474,37 +525,34 @@ const message = encodeURIComponent(`Hi Shaheen Kapda Ghar shop owner, I'm intere
                         ${initials}
                     </div>
                     <span class="ml-3 sidebar-text whitespace-nowrap">${displayName}</span>
-                    
-                    <!-- NEW TOOLTIP ELEMENT: Adjusted positioning for lists -->
-                <span class="tooltip hidden md:block absolute left-full ml-4 z-50">${displayName}</span>
+                    <span class="tooltip hidden md:block absolute left-full ml-4 z-50">${displayName}</span>
                 </button>
             </li>`;
     }
 
-        async function init() {
-            try {
-                const response = await fetch('products.json');
-                allProducts = await response.json();
-                allProducts.reverse(); 
-                
-                const catList = document.getElementById('categoryList');
-                catList.innerHTML = createSidebarItem('All');
+    async function init() {
+        try {
+            // Ensure browser does not cache products.json
+            const response = await fetch('products.json?t=' + new Date().getTime());
+            allProducts = await response.json();
+            allProducts.reverse(); 
+            
+            const catList = document.getElementById('categoryList');
+            catList.innerHTML = createSidebarItem('All');
 
-                const categories = [...new Set(allProducts.map(p => p.category).filter(c => c))];
-                categories.forEach(cat => {
-                    catList.innerHTML += createSidebarItem(cat);
-                });
+            const categories = [...new Set(allProducts.map(p => p.category).filter(c => c))];
+            categories.forEach(cat => {
+                catList.innerHTML += createSidebarItem(cat);
+            });
 
-                renderProducts(allProducts);
-                
-                // FIXED: Removed the manual JS override that caused the screen flash.
-            } catch (error) {
-                console.error("Fetch Error:", error);
-                document.getElementById('product-grid').innerHTML = '<p class="text-red-500 text-sm p-4">Error loading catalog.</p>';
-            }
+            renderProducts(allProducts);
+        } catch (error) {
+            console.error("Fetch Error:", error);
+            document.getElementById('product-grid').innerHTML = '<p class="text-red-500 text-sm p-4">Error loading catalog.</p>';
         }
+    }
 
-        init();
-    </script>
+    init();
+</script>
 </body>
 </html>

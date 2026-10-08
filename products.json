@@ -297,5 +297,27 @@
         ],
         "image_url": "https://i.ibb.co/4n2xG1GD/a2098263bcfc.jpg",
         "video_url": ""
+    },
+    {
+        "id": "f056f9f9",
+        "name": "Namaz Ka Dupatta - Oct26 (Album)",
+        "price": "100",
+        "price_unit": "Flat",
+        "fabric": "Cotton/Malmal",
+        "category": "Print Design",
+        "colors": [
+            "Multi-Colour"
+        ],
+        "image_urls": [
+            "images/1d5035b1334b4562933cc991cc1101da.JPG",
+            "images/d2a8205698f946fc836bd9fd49e3a083.JPG",
+            "images/da2e64216bd94379a4273c42b575fe2c.JPG",
+            "images/bb267e49e08943ef95828b6943322dad.JPG",
+            "images/59546f3713184b38ae2ed570ef8d1b7a.JPG",
+            "images/61f51ef0b67b445a930171601561fa76.JPG",
+            "images/13c7dbbbfb544511910e3f5b814b3b01.heic",
+            "images/18e18c116e154f5ab89d743cf89cb8d6.heic"
+        ],
+        "video_url": ""
     }
 ]
