@@ -214,8 +214,8 @@
         <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
     </button>
 
-    <!-- FIXED: Replaced legacy touch/mouse events with universal pointerdown/pointerup. Added touch-action: none to prevent mobile scrolling during swipe. -->
-    <div class="relative w-full max-w-lg h-[80vh] flex items-center justify-center select-none" style="touch-action: none;" onclick="event.stopPropagation()" onpointerdown="swipeStart(event)" onpointerup="swipeEnd(event)">
+    <!-- FIXED: Reverted to explicit touch and mouse events for maximum mobile compatibility. -->
+    <div class="relative w-full max-w-lg h-[80vh] flex items-center justify-center select-none" style="touch-action: none;" onclick="event.stopPropagation()" onmousedown="swipeStart(event)" onmouseup="swipeEnd(event)" ontouchstart="swipeStart(event)" ontouchend="swipeEnd(event)">
         
         <button id="prevBtn" class="absolute left-2 text-white bg-black bg-opacity-50 rounded-full p-2 hover:bg-opacity-80 transition z-[60] hidden" onclick="event.stopPropagation(); changeSlide(-1);">
             <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
@@ -381,29 +381,38 @@ function goToSlide(index) {
 }
 
 // --- BULLETPROOF UNIVERSAL SWIPE LOGIC ---
-let swipeStartX = 0;
+    let swipeStartX = 0;
 
-function swipeStart(e) {
-    // FIXED: Universal pointer capture to track exactly where the mouse/finger touched down
-    swipeStartX = e.clientX;
-}
-
-function swipeEnd(e) {
-    // Prevent swipe from firing if clicking specifically on the nav buttons
-    if (e.target.closest('button')) return;
-
-    // FIXED: Universal pointer capture to track exactly where the mouse/finger lifted
-    let swipeEndX = e.clientX;
-    
-    const distance = swipeEndX - swipeStartX;
-    const swipeThreshold = 40; 
-    
-    if (distance < -swipeThreshold) {
-        changeSlide(1); 
-    } else if (distance > swipeThreshold) {
-        changeSlide(-1); 
+    function swipeStart(e) {
+        // Differentiate between mobile touch and desktop mouse click
+        if (e.type === 'touchstart') {
+            swipeStartX = e.changedTouches[0].screenX;
+        } else {
+            swipeStartX = e.screenX;
+        }
     }
-}
+
+    function swipeEnd(e) {
+        // Do not swipe if the user clicked the actual previous/next buttons
+        if (e.target.closest('button')) return;
+
+        let swipeEndX = 0;
+        // Catch the end coordinate based on device type
+        if (e.type === 'touchend') {
+            swipeEndX = e.changedTouches[0].screenX;
+        } else {
+            swipeEndX = e.screenX;
+        }
+        
+        const distance = swipeEndX - swipeStartX;
+        const swipeThreshold = 40; 
+        
+        if (distance < -swipeThreshold) {
+            changeSlide(1); // Swiped Left
+        } else if (distance > swipeThreshold) {
+            changeSlide(-1); // Swiped Right
+        }
+    }
 
 document.addEventListener('keydown', function(event) {
     const modal = document.getElementById('mediaModal');
