@@ -6,22 +6,19 @@
     <title>Shaheen Kapda Ghar</title>
     <meta name="description" content="Explore dress materials, fabrics and collections from Shaheen Kapda Ghar. Browse the catalogue and enquire on WhatsApp.">
     <meta name="theme-color" content="#f3f4f6">
-    <!-- The linked icons retain the transparency in the uploaded A.png artwork. -->
+    <!-- Exactly one iOS home-screen icon: locally hosted and uniquely versioned to avoid stale OS caches. -->
     <meta name="color-scheme" content="light">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="Shaheen Kapda Ghar">
-    <link rel="manifest" href="./manifest.webmanifest">
-    <link rel="icon" type="image/png" sizes="48x48" href="./assets/skg-official-transparent-48-v3.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="./assets/skg-official-transparent-192-v3.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="./assets/skg-official-transparent-180-v3.png">
+    <link rel="manifest" href="./manifest-skg-v4.webmanifest">
+    <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon-skg-v4.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="./favicon-skg-v4.png">
     <!-- Local CSS allows the app shell to be styled offline. The original CDN remains for visual compatibility online. -->
     <link rel="stylesheet" href="./styles.css">
     <script>if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) document.documentElement.classList.add('pwa-standalone');</script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Exact official uploaded logo: local asset, no third-party image-host dependency. -->
-    <link rel="icon" type="image/png" href="./A.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
@@ -113,11 +110,8 @@
 
         /* Mobile installed-app experience only. Ordinary web browser layout stays unchanged. */
         #appBottomNav { display: none; }
-        #installBanner { display: none; }
         #offlineNotice { display: none; }
         #offlineNotice.is-offline { display: block; }
-        #installBanner.is-visible { display: flex; }
-        #installBanner[hidden], #offlineNotice[hidden] { display: none !important; }
         #appBottomNav .app-nav-action { min-height: 48px; min-width: 56px; }
         #appBottomNav .app-nav-action svg { width: 23px; height: 23px; }
         #appBottomNav a, #appBottomNav button { -webkit-tap-highlight-color: transparent; }
@@ -138,7 +132,6 @@
             html.pwa-standalone main { padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px)); }
             html.pwa-standalone #mediaModal > button:first-child { top: calc(1.5rem + env(safe-area-inset-top,0px)); }
             html.pwa-standalone #mediaModal { padding-bottom: env(safe-area-inset-bottom, 0px); }
-            #installBanner { margin: 0 10px 8px; }
             #top-header a[href^="mailto:"] { font-size: 10px; }
         }
         @media (prefers-reduced-motion: reduce) {
@@ -190,12 +183,6 @@
             </div>
         </header>
         <div id="offlineNotice" role="status" class="px-4 py-2 bg-amber-50 border-b border-amber-200 text-amber-900 text-xs text-center">You're offline. Saved catalogue items may still be available; videos and enquiries need internet.</div>
-        <div id="installBanner" role="region" aria-label="Install Shaheen Kapda Ghar app" class="items-center gap-3 px-3 py-2 bg-white border border-gray-200 rounded-lg shadow-sm md:hidden">
-            <img src="./assets/skg-official-transparent-192-v3.png" alt="" class="h-10 w-10 rounded-lg flex-shrink-0">
-            <div class="flex-1 min-w-0"><p class="text-sm font-semibold text-gray-900">Shaheen Kapda Ghar app</p><p id="installHint" class="text-xs text-gray-600">Add our catalogue to your home screen.</p></div>
-            <button id="installAppBtn" type="button" class="rounded bg-gray-900 text-white text-xs font-semibold px-3 py-2 flex-shrink-0">Install</button>
-            <button id="dismissInstallBtn" type="button" aria-label="Dismiss installation suggestion" class="text-gray-500 text-xl px-1 flex-shrink-0">&times;</button>
-        </div>
         <main class="flex-1 overflow-y-auto flex flex-col">
             <div class="p-3 md:p-8 flex-1">
                 <div class="max-w-5xl mx-auto mb-4 md:mb-6">
@@ -723,50 +710,8 @@
         });
     }
 
-    let deferredInstallPrompt = null;
-    const installBanner = document.getElementById('installBanner');
-    const installButton = document.getElementById('installAppBtn');
-    const installHint = document.getElementById('installHint');
-    const isInstalled = () => window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
-    const dismissedInstall = () => {
-        try { return sessionStorage.getItem('skg-install-dismissed') === 'yes'; }
-        catch (_) { return false; }
-    };
-    const isMobileScreen = () => window.matchMedia('(max-width: 767px)').matches;
-    function showInstallBanner() {
-        if (isMobileScreen() && !isInstalled() && !dismissedInstall()) installBanner.classList.add('is-visible');
-    }
-    function hideInstallBanner() { installBanner.classList.remove('is-visible'); }
-
-    window.addEventListener('beforeinstallprompt', event => {
-        event.preventDefault();
-        deferredInstallPrompt = event;
-        installButton.hidden = false;
-        installHint.textContent = 'Install for a full-screen, home-screen catalogue.';
-        showInstallBanner();
-    });
-
-    installButton.addEventListener('click', async () => {
-        if (!deferredInstallPrompt) return;
-        const promptEvent = deferredInstallPrompt;
-        deferredInstallPrompt = null;
-        hideInstallBanner();
-        await promptEvent.prompt();
-    });
-
-    document.getElementById('dismissInstallBtn').addEventListener('click', () => {
-        hideInstallBanner();
-        try { sessionStorage.setItem('skg-install-dismissed', 'yes'); } catch (_) { }
-    });
-
-    window.addEventListener('appinstalled', () => { deferredInstallPrompt = null; hideInstallBanner(); });
-
-    // iOS Safari does not fire beforeinstallprompt; provide its native steps instead.
-    if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !isInstalled()) {
-        installButton.hidden = true;
-        installHint.textContent = 'Open in Safari, tap Share, then Add to Home Screen.';
-        showInstallBanner();
-    }
+    // Browser installation is handled by Safari/Chrome native UI.
+    // No install banner is inserted into the catalogue.
     </script>
 </body>
 </html>
