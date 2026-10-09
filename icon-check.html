@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>SKG PWA v6 Live Check</title>
+<style>body{font:15px system-ui,sans-serif;max-width:810px;margin:20px auto;padding:20px;background:#f3f4f6;color:#111827}h1{font-size:24px}p{line-height:1.5}li{list-style:none;background:white;margin:8px 0;padding:12px;border-radius:8px;border:1px solid #e5e7eb}ul{padding:0}.ok{border-left:5px solid #15803d}.bad{border-left:5px solid #dc2626}.tip{padding:14px;background:white;border-radius:10px}.preview{max-width:70px;max-height:70px;vertical-align:middle;margin-left:10px}button{background:#1d4ed8;border:0;color:white;padding:12px 16px;border-radius:8px;cursor:pointer}</style>
+</head><body><h1>Shaheen Kapda Ghar — live PWA deployment test v6</h1>
+<p>Open this page on <strong>shaheen-kapda-live.pages.dev</strong> after deployment. This test reads the real file bytes rather than trusting an HTTP 200 response, which may be HTML instead of a missing PNG file.</p>
+<button id="run">Run tests again</button><ul id="results"></ul>
+<p class="tip"><strong>If any test fails:</strong> Cloudflare has not published all files at the expected root paths. Upload the entire extracted directory and check your Cloudflare Pages build output settings. Do not reinstall until every test passes.</p>
+<script>
+const checks=[
+['iPhone touch icon','/apple-touch-icon-skg-v6.png','png',180,180],
+['Conventional iPhone icon','/apple-touch-icon.png','png',180,180],
+['Chrome icon 192','/pwa-icon-skg-v6-192.png','png',192,192],
+['Chrome icon 512','/pwa-icon-skg-v6-512.png','png',512,512],
+['Favicon','/favicon-skg-v6.png','png',64,64],
+['Official source logo','/A.png','png',1254,1254],
+['Linked installation manifest','/manifest-skg-v6.webmanifest','manifest'],
+['Conventional manifest','/manifest.webmanifest','manifest'],
+['Service worker','/service-worker.js','js'],
+['Website entry','/','html']];
+async function run(){
+  const list=document.getElementById('results');list.replaceChildren();let passes=0;
+  for(const [name,path,type,w,h] of checks){
+    const item=document.createElement('li');item.textContent='Checking: '+name;list.append(item);
+    try{
+      const r=await fetch(path+'?verify_v6='+Date.now(),{cache:'no-store'});
+      if(!r.ok)throw Error('HTTP '+r.status);
+      if(type==='png'){
+        const blob=await r.blob();const buf=await blob.arrayBuffer();const b=new Uint8Array(buf),sign=[137,80,78,71,13,10,26,10];
+        if(b.length<24||sign.some((n,i)=>b[i]!==n))throw Error('Returned non-PNG content (possibly HTML fallback), content-type '+r.headers.get('content-type'));
+        const view=new DataView(buf),iw=view.getUint32(16),ih=view.getUint32(20);
+        if(iw!==w||ih!==h)throw Error('Dimensions '+iw+'x'+ih+' do not match '+w+'x'+h);
+        const img=document.createElement('img');img.className='preview';img.alt=name;const obj=URL.createObjectURL(blob);img.src=obj;img.onload=()=>URL.revokeObjectURL(obj);
+        item.replaceChildren('PASS: '+name+' ('+iw+'x'+ih+')',img);
+      } else if(type==='manifest'){
+        const raw=await r.text();const data=JSON.parse(raw);
+        if(data.display!=='standalone'||data.start_url!=='/'||!Array.isArray(data.icons)||data.icons.length<2)throw Error('Manifest settings/icons incomplete');
+        if(!data.icons.some(x=>x.src==='/pwa-icon-skg-v6-192.png')||!data.icons.some(x=>x.src==='/pwa-icon-skg-v6-512.png'))throw Error('Manifest references wrong PNG paths');
+        item.textContent='PASS: '+name+'; v6 icons linked';
+      } else if(type==='js'){
+        if(!(await r.text()).includes('skg-v6-icon-check'))throw Error('Outdated service worker');item.textContent='PASS: '+name;
+      } else {
+        const body=await r.text();if(!body.includes('/manifest-skg-v6.webmanifest')||!body.includes('id="sidebarLogo"'))throw Error('Homepage still serving an older index.html');item.textContent='PASS: '+name;
+      }
+      item.className='ok';passes++;
+    }catch(e){item.textContent='FAIL: '+name+' — '+e.message;item.className='bad';}
+  }
+  const summary=document.createElement('p');summary.style.fontWeight='bold';summary.textContent=passes+' / '+checks.length+' tests passed'+(passes===checks.length?'. You can now test PWA installation.':'. Fix FAIL items before installing.');list.prepend(summary);
+}
+document.getElementById('run').onclick=run;run();
+</script></body></html>

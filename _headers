@@ -1,0 +1,32 @@
+/index.html
+  Cache-Control: no-cache, must-revalidate
+/
+  Cache-Control: no-cache, must-revalidate
+/service-worker.js
+  Cache-Control: no-cache, must-revalidate
+/manifest-skg-v6.webmanifest
+  Content-Type: application/manifest+json
+  Cache-Control: no-cache, must-revalidate
+/manifest.webmanifest
+  Content-Type: application/manifest+json
+  Cache-Control: no-cache, must-revalidate
+/icon-check.html
+  Cache-Control: no-cache, must-revalidate
+/apple-touch-icon-skg-v6.png
+  Content-Type: image/png
+  Cache-Control: public, max-age=300
+/apple-touch-icon.png
+  Content-Type: image/png
+  Cache-Control: public, max-age=300
+/pwa-icon-skg-v6-192.png
+  Content-Type: image/png
+  Cache-Control: public, max-age=300
+/pwa-icon-skg-v6-512.png
+  Content-Type: image/png
+  Cache-Control: public, max-age=300
+/favicon-skg-v6.png
+  Content-Type: image/png
+  Cache-Control: public, max-age=300
+/A.png
+  Content-Type: image/png
+  Cache-Control: public, max-age=300
