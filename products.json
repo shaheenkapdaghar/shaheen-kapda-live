@@ -315,8 +315,8 @@
             "./images/1cc6436977f7441d84bb148124dbd65a.JPG",
             "./images/0e3a838dc4114b13ad302d5b9395adce.JPG",
             "./images/7133a22f467b4c67b2369f6c6a7b3d55.JPG",
-            "./images/b5faeebc231b4ddcadbf03f68b230972.heic",
-            "./images/22e1eb74c4564d69967577fcb94eab27.heic"
+            "./images/b5faeebc231b4ddcadbf03f68b230972.jpg",
+            "./images/22e1eb74c4564d69967577fcb94eab27.jpg"
         ],
         "video_url": ""
     },
@@ -331,25 +331,25 @@
             "All Colour Available"
         ],
         "image_urls": [
-            "./images/72272a824687401381df337a06058019.heic",
-            "./images/d5f50b14a9b04d2785296b5eb8973ae9.heic",
-            "./images/cb5b9de35e644f56980ecf26f3dc9d2d.heic",
-            "./images/c2abf3c75aaf4a9bbce94eeaee420394.heic",
-            "./images/b097557eb5334e7e8b4fcaeb3c7764e3.heic",
-            "./images/d037459a6e5e4a439f28f82f449390b2.heic",
-            "./images/2cc7376ca61f43a2bb00419b5e8d06a7.heic",
-            "./images/f99426ff59e246838af17e929b91934e.heic",
-            "./images/16ca20da26fc49e58ddf9fd0a7b35aa4.heic",
-            "./images/e848dc60f8274a15b1e54a29ba781237.heic",
-            "./images/2ba79e2350ff45a0b79377326a9daaa6.heic",
-            "./images/aa987772fa5745aa9f202476df5fd4d8.heic",
-            "./images/f96edad3ea9840229fee1f53e45cd094.heic",
-            "./images/9b3735d4da354a519906c231681eac73.heic",
-            "./images/0dbfc2fed9d1451687df15464cca4eb4.heic",
-            "./images/48d9eda53438498a99b9232f727d2c48.heic",
-            "./images/197b1102f67448559fb3bee5c1a597de.heic",
-            "./images/b0d9a00defe240d080274b4c78aba039.heic",
-            "./images/125fc8cd1e2944d893fba8cc2b0fd571.heic"
+            "./images/72272a824687401381df337a06058019.jpg",
+            "./images/d5f50b14a9b04d2785296b5eb8973ae9.jpg",
+            "./images/cb5b9de35e644f56980ecf26f3dc9d2d.jpg",
+            "./images/c2abf3c75aaf4a9bbce94eeaee420394.jpg",
+            "./images/b097557eb5334e7e8b4fcaeb3c7764e3.jpg",
+            "./images/d037459a6e5e4a439f28f82f449390b2.jpg",
+            "./images/2cc7376ca61f43a2bb00419b5e8d06a7.jpg",
+            "./images/f99426ff59e246838af17e929b91934e.jpg",
+            "./images/16ca20da26fc49e58ddf9fd0a7b35aa4.jpg",
+            "./images/e848dc60f8274a15b1e54a29ba781237.jpg",
+            "./images/2ba79e2350ff45a0b79377326a9daaa6.jpg",
+            "./images/aa987772fa5745aa9f202476df5fd4d8.jpg",
+            "./images/f96edad3ea9840229fee1f53e45cd094.jpg",
+            "./images/9b3735d4da354a519906c231681eac73.jpg",
+            "./images/0dbfc2fed9d1451687df15464cca4eb4.jpg",
+            "./images/48d9eda53438498a99b9232f727d2c48.jpg",
+            "./images/197b1102f67448559fb3bee5c1a597de.jpg",
+            "./images/b0d9a00defe240d080274b4c78aba039.jpg",
+            "./images/125fc8cd1e2944d893fba8cc2b0fd571.jpg"
         ],
         "video_url": ""
     }
